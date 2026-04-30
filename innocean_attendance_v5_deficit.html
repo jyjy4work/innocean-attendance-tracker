@@ -77,10 +77,8 @@ body{font-family:var(--font-sans);background:var(--color-background-primary);col
 .ftag{display:flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);font-size:11px;color:var(--color-text-secondary)}
 .ftag .rm{cursor:pointer;color:var(--color-text-tertiary);font-size:13px;line-height:1}.ftag .rm:hover{color:var(--color-text-danger)}
 .sbar{padding:9px 13px;border-radius:var(--border-radius-md);font-size:13px;margin-bottom:1rem;display:none}
-.si{background:var(--color-background-info);color:var(--color-text-info)}
 .se{background:var(--color-background-danger);color:var(--color-text-danger)}
 .so{background:var(--color-background-success);color:var(--color-text-success)}
-.sw{background:var(--color-background-warning);color:var(--color-text-warning)}
 .mrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:9px;margin-bottom:1.25rem}
 .mc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px}
 .mc .lbl{font-size:11px;color:var(--color-text-secondary);margin-bottom:2px}
@@ -117,6 +115,9 @@ tr.clickable:hover td{background:var(--color-background-info)}
 .bok{background:#E1F5EE;color:#0F6E56}
 .bw{background:#FAEEDA;color:#854F0B}
 .bdef{background:#FCEBEB;color:#A32D2D}
+.txt-danger{color:var(--color-text-danger)}
+.txt-danger-bold{color:var(--color-text-danger);font-weight:500}
+.txt-success{color:var(--color-text-success)}
 .pag{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:12px;color:var(--color-text-secondary)}
 .pbtns{display:flex;gap:3px}
 .pb{width:26px;height:26px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-primary);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
@@ -180,93 +181,103 @@ tr.clickable:hover td{background:var(--color-background-info)}
 .month-box .m-val{font-weight:500}
 .month-box.deficit-box{border-color:var(--color-border-danger);background:var(--color-background-danger)}
 .month-box.deficit-box .m-title{color:var(--color-text-danger)}
+
+.lang-bar{display:flex;justify-content:flex-end;gap:6px;margin-bottom:0.75rem}
+.lang-btn{padding:4px 12px;border-radius:99px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);font-size:12px;cursor:pointer;transition:all 0.15s}
+.lang-btn:hover{background:var(--color-background-secondary)}
+.lang-btn.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
 </style>
 </head>
 <body>
+<div class="lang-bar">
+  <button class="lang-btn" onclick="setLang('ko')">🇰🇷 한국어</button>
+  <button class="lang-btn" onclick="setLang('en')">🇬🇧 English</button>
+  <button class="lang-btn" onclick="setLang('fr')">🇫🇷 Français</button>
+</div>
 <div class="app">
 <div class="hdr">
-  <h1>출퇴근 분석 v5</h1>
-  <p>INNOCEAN France — 지각 + 실근무 부족분 통합 분석</p>
+  <h1 data-i18n="title">출퇴근 분석 v5</h1>
+  <p data-i18n="subtitle">INNOCEAN France — 지각 + 실근무 부족분 통합 분석</p>
 </div>
 <div class="policy-bar">
-  <span class="pd"><span class="dot" style="background:#378ADD"></span>출근 <strong>09:30</strong></span>
+  <span class="pd"><span class="dot" style="background:#378ADD"></span><span data-i18n="policyIn">출근</span> <strong>09:30</strong></span>
   <span class="psep">|</span>
-  <span class="pd"><span class="dot" style="background:#1D9E75"></span>퇴근 <strong>18:30</strong></span>
+  <span class="pd"><span class="dot" style="background:#1D9E75"></span><span data-i18n="policyOut">퇴근</span> <strong>18:30</strong></span>
   <span class="psep">|</span>
-  <span class="policy-fri">금요일 18:00</span>
+  <span class="policy-fri" data-i18n="policyFri">금요일 18:00</span>
   <span class="psep">|</span>
-  <span class="pd"><span class="dot" style="background:#BA7517"></span>점심 <strong>12:30–14:00</strong></span>
+  <span class="pd"><span class="dot" style="background:#BA7517"></span><span data-i18n="policyLunch">점심</span> <strong>12:30–14:00</strong></span>
   <span class="psep">|</span>
-  <span class="pd">소정 <strong>월~목 7h30 / 금 7h00</strong></span>
+  <span class="pd"><span data-i18n="policyReq">소정</span> <strong><span data-i18n="policyReqDetail">월~목 7h30 / 금 7h00</span></strong></span>
   <span class="psep">|</span>
-  <span class="pd" style="color:var(--color-text-danger)">★ 부족분 = 소정근무 미달 시간</span>
+  <span class="pd" style="color:var(--color-text-danger)" data-i18n="policyDef">★ 부족분 = 소정근무 미달 시간</span>
 </div>
 <div id="sbar" class="sbar"></div>
 <div class="upload-grid">
-  <div class="ubox" id="drop-badge"><input type="file" id="fi-badge" accept=".xlsx"><div class="ubox-icon" id="badge-icon">🏷️</div><h3>배지 정보 파일</h3><p>Badges_Innocean_Final.xlsx<br>드래그 또는 클릭으로 업로드</p><label for="fi-badge" class="ubox-label">파일 선택</label></div>
-  <div class="ubox" id="drop-access"><input type="file" id="fi-access" accept=".xlsx" multiple><div class="ubox-icon">📂</div><h3>출입 로데이터</h3><p>여러 파일 동시 업로드 / 드래그</p><label for="fi-access" class="ubox-label">파일 선택</label></div>
+  <div class="ubox" id="drop-badge"><input type="file" id="fi-badge" accept=".xlsx"><div class="ubox-icon" id="badge-icon">🏷️</div><h3 data-i18n="badgeTitle">배지 정보 파일</h3><p data-i18n="badgeDesc">Badges_Innocean_Final.xlsx<br>드래그 또는 클릭으로 업로드</p><label for="fi-badge" class="ubox-label" data-i18n="btnSelect">파일 선택</label></div>
+  <div class="ubox" id="drop-access"><input type="file" id="fi-access" accept=".xlsx" multiple><div class="ubox-icon">📂</div><h3 data-i18n="accessTitle">출입 로데이터</h3><p data-i18n="accessDesc">여러 파일 동시 업로드 / 드래그</p><label for="fi-access" class="ubox-label" data-i18n="btnSelect">파일 선택</label></div>
 </div>
 <div id="ftags" class="ftags"></div>
 
 <div id="main" style="display:none">
   <div class="mrow" id="mrow"></div>
   <div class="tabs">
-    <div class="tab active" data-tab="daily">일별 출퇴근</div>
-    <div class="tab" data-tab="summary">직원 요약</div>
-    <div class="tab" data-tab="stats">전체 통계</div>
-    <div class="tab" data-tab="unmatched">미매칭 배지</div>
+    <div class="tab active" data-tab="daily" data-i18n="tabDaily">일별 출퇴근</div>
+    <div class="tab" data-tab="summary" data-i18n="tabSummary">직원 요약</div>
+    <div class="tab" data-tab="stats" data-i18n="tabStats">전체 통계</div>
+    <div class="tab" data-tab="unmatched" data-i18n="tabUnmatched">미매칭 배지</div>
   </div>
   <div class="tc active" id="tab-daily">
     <div class="ctrls">
-      <input type="text" id="s-name" placeholder="직원명 / 배지번호...">
+      <input type="text" id="s-name" id="s-name" placeholder="직원명 / 배지번호..." data-i18n-placeholder="searchName">
       <input type="date" id="s-from"><span style="font-size:13px;color:var(--color-text-secondary)">~</span><input type="date" id="s-to">
       <select id="s-month"><option value="">전체</option></select>
-      <select id="s-status"><option value="">전체 상태</option><option value="정상">정상</option><option value="지각">지각</option><option value="조기출근">조기출근</option><option value="조기퇴근">조기퇴근</option><option value="근무부족">근무부족</option></select>
-      <button class="btn" onclick="resetF()">초기화</button>
-      <button class="btn btn-p mla" onclick="exportCSV()">CSV</button>
+      <select id="s-status"><option value="" data-i18n="allStatus">전체 상태</option><option value="정상" data-i18n="tagOk">정상</option><option value="지각" data-i18n="tagLate">지각</option><option value="조기출근" data-i18n="tagEarlyIn">조기출근</option><option value="조기퇴근" data-i18n="tagEarlyOut">조기퇴근</option><option value="근무부족" data-i18n="tagDef">근무부족</option></select>
+      <button class="btn" onclick="resetF()" data-i18n="btnReset">초기화</button>
+      <button class="btn btn-p mla" onclick="exportCSV()" data-i18n="btnCSV">CSV</button>
     </div>
     <div class="tw"><table><thead><tr>
-      <th style="width:155px" onclick="sortD('name')">직원명 ↕</th>
-      <th style="width:65px" onclick="sortD('ifr')">배지 ↕</th>
-      <th style="width:100px" onclick="sortD('date')">날짜 ↕</th>
-      <th style="width:68px" onclick="sortD('in')">출근 ↕</th>
-      <th style="width:68px" onclick="sortD('out')">퇴근 ↕</th>
-      <th style="width:72px" onclick="sortD('netH')">실근무 ↕</th>
-      <th style="width:72px" onclick="sortD('defMin')">★부족분 ↕</th>
-      <th style="width:62px" onclick="sortD('lateMin')">지각분 ↕</th>
-      <th style="width:115px">상태</th>
+      <th style="width:155px" onclick="sortD('name')" data-i18n="colName">직원명 ↕</th>
+      <th style="width:65px" onclick="sortD('ifr')" data-i18n="colBadge">배지 ↕</th>
+      <th style="width:100px" onclick="sortD('date')" data-i18n="colDate">날짜 ↕</th>
+      <th style="width:68px" onclick="sortD('in')" data-i18n="colIn">출근 ↕</th>
+      <th style="width:68px" onclick="sortD('out')" data-i18n="colOut">퇴근 ↕</th>
+      <th style="width:72px" onclick="sortD('netH')" data-i18n="colNet">실근무 ↕</th>
+      <th style="width:72px" onclick="sortD('defMin')" data-i18n="colDef">★부족분 ↕</th>
+      <th style="width:62px" onclick="sortD('lateMin')" data-i18n="colLate">지각분 ↕</th>
+      <th style="width:115px" data-i18n="colStatus">상태</th>
     </tr></thead><tbody id="body-daily"></tbody></table></div>
     <div class="pag" id="pag-daily"></div>
   </div>
   <div class="tc" id="tab-summary">
     <div class="ctrls">
-      <input type="text" id="s-sumname" placeholder="직원 검색...">
+      <input type="text" id="s-sumname" placeholder="직원 검색..." data-i18n-placeholder="searchEmp">
       <select id="s-summonth"><option value="">전체</option></select>
-      <span style="font-size:12px;color:var(--color-text-tertiary);margin-left:4px">이름 클릭 → 상세</span>
+      <span style="font-size:12px;color:var(--color-text-tertiary);margin-left:4px"><span data-i18n="clickHint">이름 클릭 → 상세</span></span>
     </div>
     <div class="tw"><table><thead><tr>
-      <th style="width:155px">직원명</th><th style="width:60px">배지</th><th style="width:55px">출근일</th>
-      <th style="width:72px">평균출근</th><th style="width:72px">평균퇴근</th><th style="width:78px">평균실근무</th>
-      <th style="width:55px">지각일</th><th style="width:68px">총지각분</th><th style="width:60px">조기퇴근</th>
-      <th style="width:82px">★총부족분</th><th style="width:75px">★부족일수</th>
+      <th style="width:155px" data-i18n="colName">직원명</th><th style="width:60px" data-i18n="colBadge">배지</th><th style="width:55px" data-i18n="colDays">출근일</th>
+      <th style="width:72px" data-i18n="colAvgIn">평균출근</th><th style="width:72px" data-i18n="colAvgOut">평균퇴근</th><th style="width:78px" data-i18n="colAvgNet">평균실근무</th>
+      <th style="width:55px" data-i18n="colLateDays">지각일</th><th style="width:68px" data-i18n="colTotalLate">총지각분</th><th style="width:60px" data-i18n="colEarlyOut">조기퇴근</th>
+      <th style="width:82px" data-i18n="colTotalDef">★총부족분</th><th style="width:75px" data-i18n="colDefDays">★부족일수</th>
     </tr></thead><tbody id="body-sum"></tbody></table></div>
   </div>
   <div class="tc" id="tab-stats">
-    <div class="sec"><div class="sec-title">날짜별 출근 인원 (평일만)</div><div class="ca" style="height:210px"><canvas id="ch-daily" role="img" aria-label="날짜별 출근 인원"></canvas></div></div>
-    <div class="sec"><div class="sec-title">요일별 평균 출근 인원</div><div class="ca" style="height:180px"><canvas id="ch-wd" role="img" aria-label="요일별 평균 출근 인원"></canvas></div></div>
-    <div class="sec"><div class="sec-title">출근 시간대 분포</div><div class="ca" style="height:190px"><canvas id="ch-hr" role="img" aria-label="출근 시간대 분포"></canvas></div></div>
-    <div class="sec"><div class="sec-title">직원별 평균 지각 Top 20</div><div class="ca" style="height:300px"><canvas id="ch-late" role="img" aria-label="직원별 평균 지각"></canvas></div></div>
-    <div class="sec"><div class="sec-title">★ 직원별 총 근무 부족분 Top 20</div><div class="ca" style="height:300px"><canvas id="ch-def" role="img" aria-label="직원별 총 근무 부족분"></canvas></div></div>
+    <div class="sec"><div class="sec-title" data-i18n="chartDaily">날짜별 출근 인원 (평일만)</div><div class="ca" style="height:210px"><canvas id="ch-daily" role="img" aria-label="날짜별 출근 인원"></canvas></div></div>
+    <div class="sec"><div class="sec-title" data-i18n="chartWeekday">요일별 평균 출근 인원</div><div class="ca" style="height:180px"><canvas id="ch-wd" role="img" aria-label="요일별 평균 출근 인원"></canvas></div></div>
+    <div class="sec"><div class="sec-title" data-i18n="chartHour">출근 시간대 분포</div><div class="ca" style="height:190px"><canvas id="ch-hr" role="img" aria-label="출근 시간대 분포"></canvas></div></div>
+    <div class="sec"><div class="sec-title" data-i18n="chartLate">직원별 평균 지각 Top 20</div><div class="ca" style="height:300px"><canvas id="ch-late" role="img" aria-label="직원별 평균 지각"></canvas></div></div>
+    <div class="sec"><div class="sec-title" data-i18n="chartDef">★ 직원별 총 근무 부족분 Top 20</div><div class="ca" style="height:300px"><canvas id="ch-def" role="img" aria-label="직원별 총 근무 부족분"></canvas></div></div>
   </div>
   <div class="tc" id="tab-unmatched">
-    <div class="tip">배지 파일에 없는 Identifiant 목록입니다.</div>
+    <div class="tip" data-i18n="unmatchedTip">배지 파일에 없는 Identifiant 목록입니다.</div>
     <div id="unmatched-content" class="ul-wrap"><div class="ul-row ul-hdr"><div>Identifiant</div><div>로그 표시명</div><div>건수</div></div></div>
   </div>
   <div id="detail-panel" class="detail-panel" style="display:none">
     <div class="detail-header">
       <div><h2 id="detail-name">—</h2><div class="sub" id="detail-sub">—</div></div>
       <div style="display:flex;gap:8px;align-items:center">
-        <button class="pdf-btn" onclick="printEmployee()">🖨️ PDF / 인쇄</button>
+        <button class="pdf-btn" onclick="printEmployee()" data-i18n="btnPrint">🖨️ PDF / 인쇄</button>
         <span class="detail-close" onclick="closeDetail()">✕</span>
       </div>
     </div>
@@ -274,20 +285,20 @@ tr.clickable:hover td{background:var(--color-background-info)}
       <div class="emp-mrow" id="emp-mrow"></div>
       <div id="emp-month-summary" style="margin-bottom:1rem"></div>
       <div class="emp-tabs">
-        <div class="emp-tab active" data-etab="timeline">📈 타임라인</div>
-        <div class="emp-tab" data-etab="calendar">📅 캘린더</div>
-        <div class="emp-tab" data-etab="monthly">📊 월별 추이</div>
-        <div class="emp-tab" data-etab="dist">🕘 출근 분포</div>
-        <div class="emp-tab" data-etab="log">📋 기록</div>
+        <div class="emp-tab active" data-etab="timeline" data-i18n="etabTimeline">📈 타임라인</div>
+        <div class="emp-tab" data-etab="calendar" data-i18n="etabCalendar">📅 캘린더</div>
+        <div class="emp-tab" data-etab="monthly" data-i18n="etabMonthly">📊 월별 추이</div>
+        <div class="emp-tab" data-etab="dist" data-i18n="etabDist">🕘 출근 분포</div>
+        <div class="emp-tab" data-etab="log" data-i18n="etabLog">📋 기록</div>
       </div>
       <div class="emp-tc active" id="etab-timeline"><div class="ca" style="height:260px"><canvas id="ch-emp-timeline" role="img" aria-label="일별 타임라인"></canvas></div></div>
       <div class="emp-tc" id="etab-calendar">
         <div class="cal-legend">
-          <span><span class="cl-dot" style="background:#E1F5EE;border:1px solid #0F6E56"></span>정상</span>
-          <span><span class="cl-dot" style="background:#FAECE7;border:1px solid #993C1D"></span>지각</span>
-          <span><span class="cl-dot" style="background:#FAEEDA;border:1px solid #854F0B"></span>조기퇴근</span>
-          <span><span class="cl-dot" style="background:#FCEBEB;border:1px solid #A32D2D"></span>근무부족/지각+조기</span>
-          <span><span class="cl-dot" style="background:#f3f4f6;border:1px solid #d1d5db"></span>주말/없음</span>
+          <span><span class="cl-dot" style="background:#E1F5EE;border:1px solid #0F6E56" data-i18n="tagOk"></span>정상</span>
+          <span><span class="cl-dot" style="background:#FAECE7;border:1px solid #993C1D" data-i18n="tagLate"></span>지각</span>
+          <span><span class="cl-dot" style="background:#FAEEDA;border:1px solid #854F0B" data-i18n="tagEarlyOut"></span>조기퇴근</span>
+          <span><span class="cl-dot" style="background:#FCEBEB;border:1px solid #A32D2D" data-i18n="tagDefCombo"></span>근무부족/지각+조기</span>
+          <span><span class="cl-dot" style="background:#f3f4f6;border:1px solid #d1d5db" data-i18n="tagWeekend"></span>주말/없음</span>
         </div>
         <div id="cal-content" class="cal-wrap"></div>
       </div>
@@ -295,10 +306,10 @@ tr.clickable:hover td{background:var(--color-background-info)}
       <div class="emp-tc" id="etab-dist"><div class="ca" style="height:200px"><canvas id="ch-emp-dist" role="img" aria-label="출근 분포"></canvas></div></div>
       <div class="emp-tc" id="etab-log">
         <div class="tw"><table><thead><tr>
-          <th style="width:100px">날짜</th><th style="width:38px">요일</th>
-          <th style="width:65px">출근</th><th style="width:65px">퇴근</th>
-          <th style="width:72px">실근무</th><th style="width:72px">★부족분</th>
-          <th style="width:62px">지각분</th><th style="width:120px">상태</th>
+          <th style="width:100px" data-i18n="colDate">날짜</th><th style="width:38px" data-i18n="colDow">요일</th>
+          <th style="width:65px" data-i18n="colIn">출근</th><th style="width:65px" data-i18n="colOut">퇴근</th>
+          <th style="width:72px" data-i18n="colNet">실근무</th><th style="width:72px" data-i18n="colDef">★부족분</th>
+          <th style="width:62px" data-i18n="colLate">지각분</th><th style="width:120px">상태</th>
         </tr></thead><tbody id="emp-log-body"></tbody></table></div>
       </div>
     </div>
@@ -306,19 +317,404 @@ tr.clickable:hover td{background:var(--color-background-info)}
 </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
+// ════════════════════════════════════════════════════════
+// MULTILINGUAL SYSTEM — 다국어 시스템
+// ════════════════════════════════════════════════════════
+const TRANSLATIONS = {
+  ko: {
+    title: '출퇴근 분석 v5',
+    subtitle: 'INNOCEAN France — 지각 + 실근무 부족분 통합 분석',
+    policyIn: '출근',
+    policyOut: '퇴근',
+    policyLunch: '점심',
+    policyReq: '소정',
+    policyDef: '★ 부족분 = 소정근무 미달 시간',
+    policyFri: '금요일 18:00',
+    badgeTitle: '배지 정보 파일',
+    badgeDesc: 'Badges_Innocean_Final.xlsx<br>드래그 또는 클릭으로 업로드',
+    accessTitle: '출입 로데이터',
+    accessDesc: '여러 파일 동시 업로드 / 드래그',
+    btnSelect: '파일 선택',
+    tabDaily: '일별 출퇴근',
+    tabSummary: '직원 요약',
+    tabStats: '전체 통계',
+    tabUnmatched: '미매칭 배지',
+    searchName: '직원명 / 배지번호...',
+    searchEmp: '직원 검색...',
+    allStatus: '전체 상태',
+    tagOk: '정상',
+    tagLate: '지각',
+    tagEarlyIn: '조기출근',
+    tagEarlyOut: '조기퇴근',
+    tagDef: '근무부족',
+    tagDefCombo: '근무부족/지각+조기',
+    tagWeekend: '주말/없음',
+    btnReset: '초기화',
+    btnCSV: 'CSV',
+    btnPrint: '🖨️ PDF / 인쇄',
+    colName: '직원명 ↕', colBadge: '배지 ↕', colDate: '날짜 ↕',
+    colIn: '출근 ↕', colOut: '퇴근 ↕', colNet: '실근무 ↕',
+    colDef: '★부족분 ↕', colLate: '지각분 ↕', colStatus: '상태',
+    colDays: '출근일', colAvgIn: '평균출근', colAvgOut: '평균퇴근',
+    colAvgNet: '평균실근무', colLateDays: '지각일', colTotalLate: '총지각분',
+    colEarlyOut: '조기퇴근', colTotalDef: '★총부족분', colDefDays: '★부족일수',
+    colDow: '요일',
+    clickHint: '이름 클릭 → 상세',
+    chartDaily: '날짜별 출근 인원 (평일만)',
+    chartWeekday: '요일별 평균 출근 인원',
+    chartHour: '출근 시간대 분포',
+    chartLate: '직원별 평균 지각 Top 20',
+    chartDef: '★ 직원별 총 근무 부족분 Top 20',
+    unmatchedTip: '배지 파일에 없는 Identifiant 목록입니다.',
+    etabTimeline: '📈 타임라인', etabCalendar: '📅 캘린더',
+    etabMonthly: '📊 월별 추이', etabDist: '🕘 출근 분포', etabLog: '📋 기록',
+    // JS-generated strings
+    employees: '명', records: '건', lunchExcl: '점심 제외', badgeBasis: '배지 기준',
+    lateRate: '지각 비율', deficitDays: '근무부족일', matchRate: '매칭률',
+    empCount: '직원 수', recCount: '출근 기록', avgNet: '평균 실근무',
+    noUnmatched: '미매칭 없음 ✓',
+    badgeSub: '배지',
+    days: '일', occur: '건', times: '회', mins: '분',
+    workDays: '출근일수', avgIn: '평균 출근', avgOut: '평균 퇴근',
+    avgNetWork: '평균 실근무', lateDays: '지각일수', totalLate: '총 지각',
+    totalDeficit: '★ 총 근무부족', earlyOut: '조기퇴근', occurred: '일 발생',
+    monthOk: '✓', monthWarn: '⚠ 부족',
+    mDays: '출근일', mAvgNet: '평균 실근무', mLate: '지각', mDef: '★ 근무부족',
+    mSuff: '충족 ✓',
+    satisfied: '충족', satisfiedFull: '충족 ✓',
+    noData: '데이터 없음',
+    dow: ['일','월','화','수','목','금','토'],
+    fri: '금',
+    lateLabel: '출근', departLabel: '퇴근',
+    lateTooltip: '지각+', defTooltip: '⚠-',
+    chartLateLabel: '지각', chartEarlyOutLabel: '조기퇴근', chartDefLabel: '★근무부족',
+    chartArrLabel: '출근 횟수', chartAvgLabel: '평균',
+    chartLateMinLabel: '평균 지각(분)', chartDefMinLabel: '총 부족분(분)',
+    defSuffix: ' 부족',
+    policyReqDetail: '월~목 7h30 / 금 7h00',
+    outH_fri: '18:00',
+    tagUnmatched: '미매칭',
+    pdfTitle: '출퇴근 리포트',
+    pdfBadge: '배지',
+    pdfPolicy: '출근 기준 09:30 | 퇴근 기준 18:30 (금요일 18:00) | 점심 12:30–14:00 제외 | 소정근무 월~목 7h30 / 금 7h00',
+    pdfWorkDays: '출근일수', pdfAvgIn: '평균 출근', pdfAvgOut: '평균 퇴근',
+    pdfAvgNet: '평균 실근무', pdfLateDays: '지각일수', pdfTotalLate: '총 지각',
+    pdfTotalDef: '★총 근무부족', pdfEarlyOut: '조기퇴근',
+    pdfColDate: '날짜', pdfColDow: '요일', pdfColIn: '출근', pdfColOut: '퇴근',
+    pdfColNet: '실근무', pdfColDef: '★부족분', pdfColLate: '지각', pdfColStatus: '상태',
+    pdfFooter: 'INNOCEAN France 출퇴근 리포트',
+    pdfGenerated: '생성일',
+    pdfLocale: 'ko-KR',
+    csvHeaders: ['직원명','배지','날짜','요일','출근','퇴근','실근무','부족분','지각(분)','상태','매칭'],
+    csvMatched: 'O', csvUnmatched: '미매칭',
+    minUnit: '분',
+    dayUnit: '일',
+    timeUnit: '회',
+  },
+  en: {
+    title: 'Attendance Analysis v5',
+    subtitle: 'INNOCEAN France — Late arrivals & working hour deficit tracker',
+    policyIn: 'Start',
+    policyOut: 'End',
+    policyLunch: 'Lunch',
+    policyReq: 'Required',
+    policyDef: '★ Deficit = hours below required',
+    policyFri: 'Friday 18:00',
+    badgeTitle: 'Badge File',
+    badgeDesc: 'Badges_Innocean_Final.xlsx<br>Drag & drop or click to upload',
+    accessTitle: 'Access Log Data',
+    accessDesc: 'Multiple files supported / drag & drop',
+    btnSelect: 'Select file',
+    tabDaily: 'Daily Log',
+    tabSummary: 'Employee Summary',
+    tabStats: 'Statistics',
+    tabUnmatched: 'Unmatched Badges',
+    searchName: 'Employee name / Badge no...',
+    searchEmp: 'Search employee...',
+    allStatus: 'All statuses',
+    tagOk: 'On time',
+    tagLate: 'Late',
+    tagEarlyIn: 'Early arrival',
+    tagEarlyOut: 'Early departure',
+    tagDef: 'Hour deficit',
+    tagDefCombo: 'Deficit / Late + Early out',
+    tagWeekend: 'Weekend / No data',
+    btnReset: 'Reset',
+    btnCSV: 'CSV',
+    btnPrint: '🖨️ PDF / Print',
+    colName: 'Name ↕', colBadge: 'Badge ↕', colDate: 'Date ↕',
+    colIn: 'Arrival ↕', colOut: 'Departure ↕', colNet: 'Net hours ↕',
+    colDef: '★Deficit ↕', colLate: 'Late (min) ↕', colStatus: 'Status',
+    colDays: 'Days', colAvgIn: 'Avg arrival', colAvgOut: 'Avg departure',
+    colAvgNet: 'Avg net hrs', colLateDays: 'Late days', colTotalLate: 'Total late (min)',
+    colEarlyOut: 'Early out', colTotalDef: '★Total deficit', colDefDays: '★Deficit days',
+    colDow: 'Day',
+    clickHint: 'Click name → details',
+    chartDaily: 'Daily headcount (weekdays only)',
+    chartWeekday: 'Average headcount by day of week',
+    chartHour: 'Arrival time distribution',
+    chartLate: 'Top 20 avg late minutes by employee',
+    chartDef: '★ Top 20 cumulative hour deficit by employee',
+    unmatchedTip: 'Identifiants found in access logs but not in the badge file.',
+    etabTimeline: '📈 Timeline', etabCalendar: '📅 Calendar',
+    etabMonthly: '📊 Monthly trend', etabDist: '🕘 Arrival dist.', etabLog: '📋 Log',
+    employees: '', records: 'records', lunchExcl: 'excl. lunch', badgeBasis: 'badge basis',
+    lateRate: 'Late rate', deficitDays: 'Hour deficit days', matchRate: 'Match rate',
+    empCount: 'Employees', recCount: 'Attendance records', avgNet: 'Avg net hours',
+    noUnmatched: 'No unmatched badges ✓',
+    badgeSub: 'Badge',
+    days: 'days', occur: 'cases', times: 'times', mins: 'min',
+    workDays: 'Work days', avgIn: 'Avg arrival', avgOut: 'Avg departure',
+    avgNetWork: 'Avg net hours', lateDays: 'Late days', totalLate: 'Total late',
+    totalDeficit: '★ Total deficit', earlyOut: 'Early departures', occurred: 'days affected',
+    monthOk: '✓', monthWarn: '⚠ Deficit',
+    mDays: 'Work days', mAvgNet: 'Avg net hours', mLate: 'Late', mDef: '★ Hour deficit',
+    mSuff: 'Sufficient ✓',
+    satisfied: 'OK', satisfiedFull: 'Sufficient ✓',
+    noData: 'No data',
+    dow: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+    fri: 'Fri',
+    lateLabel: 'Arrival', departLabel: 'Departure',
+    lateTooltip: 'late+', defTooltip: '⚠-',
+    chartLateLabel: 'Late', chartEarlyOutLabel: 'Early out', chartDefLabel: '★Hour deficit',
+    chartArrLabel: 'Count', chartAvgLabel: 'Average',
+    chartLateMinLabel: 'Avg late (min)', chartDefMinLabel: 'Total deficit (min)',
+    defSuffix: ' short',
+    policyReqDetail: 'Mon–Thu 7h30 / Fri 7h00',
+    outH_fri: '18:00',
+    tagUnmatched: 'Unmatched',
+    pdfTitle: 'Attendance Report',
+    pdfBadge: 'Badge',
+    pdfPolicy: 'Start: 09:30 | End: 18:30 (Fri 18:00) | Lunch 12:30–14:00 excl. | Required Mon–Thu 7h30 / Fri 7h00',
+    pdfWorkDays: 'Work days', pdfAvgIn: 'Avg arrival', pdfAvgOut: 'Avg departure',
+    pdfAvgNet: 'Avg net hours', pdfLateDays: 'Late days', pdfTotalLate: 'Total late',
+    pdfTotalDef: '★Total deficit', pdfEarlyOut: 'Early departures',
+    pdfColDate: 'Date', pdfColDow: 'Day', pdfColIn: 'Arrival', pdfColOut: 'Departure',
+    pdfColNet: 'Net hours', pdfColDef: '★Deficit', pdfColLate: 'Late', pdfColStatus: 'Status',
+    pdfFooter: 'INNOCEAN France Attendance Report',
+    pdfGenerated: 'Generated',
+    pdfLocale: 'en-GB',
+    csvHeaders: ['Name','Badge','Date','Day','Arrival','Departure','Net hours','Deficit','Late (min)','Status','Matched'],
+    csvMatched: 'Yes', csvUnmatched: 'No match',
+    minUnit: 'min',
+    dayUnit: ' days',
+    timeUnit: ' times',
+  },
+  fr: {
+    title: 'Analyse des présences v5',
+    subtitle: "INNOCEAN France — Retards & déficit d'heures travaillées",
+    policyIn: 'Arrivée',
+    policyOut: 'Départ',
+    policyLunch: 'Pause déj.',
+    policyReq: 'Requis',
+    policyDef: '★ Déficit = heures en dessous du requis',
+    policyFri: 'Vendredi 18:00',
+    badgeTitle: 'Fichier badges',
+    badgeDesc: "Badges_Innocean_Final.xlsx<br>Glisser-déposer ou cliquer",
+    accessTitle: "Données d'accès brutes",
+    accessDesc: 'Plusieurs fichiers simultanés / glisser',
+    btnSelect: 'Choisir un fichier',
+    tabDaily: 'Journal quotidien',
+    tabSummary: 'Résumé employés',
+    tabStats: 'Statistiques',
+    tabUnmatched: 'Badges non trouvés',
+    searchName: 'Nom / N° badge...',
+    searchEmp: 'Rechercher un employé...',
+    allStatus: 'Tous les statuts',
+    tagOk: "À l'heure",
+    tagLate: 'Retard',
+    tagEarlyIn: 'Arrivée anticipée',
+    tagEarlyOut: 'Départ anticipé',
+    tagDef: 'Déficit heures',
+    tagDefCombo: 'Déficit / Retard + Départ anticipé',
+    tagWeekend: 'Week-end / Absent',
+    btnReset: 'Réinitialiser',
+    btnCSV: 'CSV',
+    btnPrint: '🖨️ PDF / Imprimer',
+    colName: 'Nom ↕', colBadge: 'Badge ↕', colDate: 'Date ↕',
+    colIn: 'Arrivée ↕', colOut: 'Départ ↕', colNet: 'Heures nettes ↕',
+    colDef: '★Déficit ↕', colLate: 'Retard (min) ↕', colStatus: 'Statut',
+    colDays: 'Jours', colAvgIn: 'Arr. moy.', colAvgOut: 'Dép. moy.',
+    colAvgNet: 'H. nettes moy.', colLateDays: 'Jours retard', colTotalLate: 'Total retard (min)',
+    colEarlyOut: 'Départs anticipés', colTotalDef: '★Total déficit', colDefDays: '★Jours déficit',
+    colDow: 'Jour',
+    clickHint: 'Cliquer nom → détails',
+    chartDaily: 'Présences par date (jours ouvrés)',
+    chartWeekday: 'Présence moyenne par jour de semaine',
+    chartHour: "Distribution des heures d'arrivée",
+    chartLate: 'Top 20 retard moyen par employé',
+    chartDef: '★ Top 20 déficit cumulé par employé',
+    unmatchedTip: 'Identifiants présents dans les logs mais absents du fichier badges.',
+    etabTimeline: '📈 Chronologie', etabCalendar: '📅 Calendrier',
+    etabMonthly: '📊 Tendance mensuelle', etabDist: '🕘 Distribution', etabLog: '📋 Journal',
+    employees: '', records: 'enregistrements', lunchExcl: 'pause excl.', badgeBasis: 'base badges',
+    lateRate: 'Taux de retard', deficitDays: 'Jours déficit', matchRate: 'Taux de correspondance',
+    empCount: 'Employés', recCount: 'Présences enregistrées', avgNet: 'H. nettes moy.',
+    noUnmatched: 'Aucun badge non correspondant ✓',
+    badgeSub: 'Badge',
+    days: 'jours', occur: 'cas', times: 'fois', mins: 'min',
+    workDays: 'Jours travaillés', avgIn: 'Arr. moy.', avgOut: 'Dép. moy.',
+    avgNetWork: 'H. nettes moy.', lateDays: 'Jours retard', totalLate: 'Total retard',
+    totalDeficit: '★ Total déficit', earlyOut: 'Départs anticipés', occurred: 'jours affectés',
+    monthOk: '✓', monthWarn: '⚠ Déficit',
+    mDays: 'Jours trav.', mAvgNet: 'H. nettes moy.', mLate: 'Retard', mDef: '★ Déficit heures',
+    mSuff: 'Suffisant ✓',
+    satisfied: 'OK', satisfiedFull: 'Suffisant ✓',
+    noData: 'Aucune donnée',
+    dow: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+    fri: 'Ven',
+    lateLabel: 'Arrivée', departLabel: 'Départ',
+    lateTooltip: 'retard+', defTooltip: '⚠-',
+    chartLateLabel: 'Retard', chartEarlyOutLabel: 'Dép. anticipé', chartDefLabel: '★Déficit',
+    chartArrLabel: 'Comptage', chartAvgLabel: 'Moyenne',
+    chartLateMinLabel: 'Retard moy. (min)', chartDefMinLabel: 'Déficit total (min)',
+    defSuffix: ' manquant',
+    policyReqDetail: 'Lun–Jeu 7h30 / Ven 7h00',
+    outH_fri: '18:00',
+    tagUnmatched: 'Non trouvé',
+    pdfTitle: 'Rapport de présences',
+    pdfBadge: 'Badge',
+    pdfPolicy: 'Arrivée: 09:30 | Départ: 18:30 (Ven 18:00) | Pause 12:30–14:00 excl. | Requis Lun–Jeu 7h30 / Ven 7h00',
+    pdfWorkDays: 'Jours travaillés', pdfAvgIn: 'Arr. moy.', pdfAvgOut: 'Dép. moy.',
+    pdfAvgNet: 'H. nettes moy.', pdfLateDays: 'Jours retard', pdfTotalLate: 'Total retard',
+    pdfTotalDef: '★Total déficit', pdfEarlyOut: 'Départs anticipés',
+    pdfColDate: 'Date', pdfColDow: 'Jour', pdfColIn: 'Arrivée', pdfColOut: 'Départ',
+    pdfColNet: 'H. nettes', pdfColDef: '★Déficit', pdfColLate: 'Retard', pdfColStatus: 'Statut',
+    pdfFooter: 'INNOCEAN France Rapport de présences',
+    pdfGenerated: 'Généré le',
+    pdfLocale: 'fr-FR',
+    csvHeaders: ['Nom','Badge','Date','Jour','Arrivée','Départ','H. nettes','Déficit','Retard (min)','Statut','Correspondance'],
+    csvMatched: 'Oui', csvUnmatched: 'Non trouvé',
+    minUnit: ' min',
+    dayUnit: ' jours',
+    timeUnit: ' fois',
+  }
+};
+
+let currentLang = 'ko';
+
+function T(key) { return (TRANSLATIONS[currentLang] || TRANSLATIONS.ko)[key] || key; }
+
+// ── Shared helpers ────────────────────────────────────────
+// Shared chart factory — reduces repetition in build* functions
+function mkBarChart(el, labels, datasets, opts={}){
+  const{tc,gc}=chartColors();
+  return new Chart(el,{
+    type: opts.horizontal?'bar':'bar',
+    data:{labels,datasets},
+    options:{
+      indexAxis: opts.horizontal?'y':'x',
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:opts.legend||false,labels:opts.legend?{color:tc,font:{size:11}}:{}},
+        ...(opts.tooltip?{tooltip:opts.tooltip}:{})
+      },
+      scales:{
+        x:{ticks:{color:tc,...(opts.xTicks||{})},grid:{display:opts.horizontal?false:false,...(opts.xGrid||{})}},
+        y:{ticks:{color:tc,...(opts.yTicks||{})},grid:{color:gc,...(opts.yGrid||{})},beginAtZero:opts.beginAtZero||false}
+      }
+    }
+  });
+}
+
+// Badge CSS class from Korean tag value (always Korean internally)
+function tagCss(t){
+  return t==='지각'?'bl':t==='조기퇴근'?'beo':t==='조기출근'?'bei':t==='근무부족'?'bdef':'bok';
+}
+// Translated tag label
+const TAG_KEYS={'정상':'tagOk','지각':'tagLate','조기출근':'tagEarlyIn','조기퇴근':'tagEarlyOut','근무부족':'tagDef'};
+function tagLabel(t){ return T(TAG_KEYS[t]) || t; }
+// Full badge span HTML
+function badgeSpan(t){ return `<span class="badge ${tagCss(t)}">${tagLabel(t)}</span>`; }
+// Render array of tags to badge HTML string
+function renderTags(tags){ return tags.map(badgeSpan).join(''); }
+// Theme colors for charts
+function chartColors(){
+  const dk=matchMedia('(prefers-color-scheme:dark)').matches;
+  const tc=dk?'rgba(255,255,255,0.5)':'rgba(0,0,0,0.4)';
+  const gc=dk?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.05)';
+  // Reusable axis config builders
+  const xAxis=(extra={})=>({ticks:{color:tc,...(extra.ticks||{})},grid:{color:gc,...(extra.grid||{})},...extra.axis||{}});
+  const yAxis=(extra={})=>({ticks:{color:tc,...(extra.ticks||{})},grid:{color:gc,...(extra.grid||{})},...extra.axis||{}});
+  return{tc,gc,xAxis,yAxis};
+}
+
+function updateGlobalMetrics() {
+  if(!dailyData.length) return;
+  const emp=new Set(dailyData.map(d=>d.name)).size;
+  const lD=dailyData.filter(d=>d.lateMin>0).length;
+  const defDays=dailyData.filter(d=>d.defMin>0).length;
+  const vN=dailyData.filter(d=>d.netH>0);
+  const aN=vN.length?vN.reduce((a,b)=>a+b.netH,0)/vN.length:0;
+  const lR=dailyData.length?Math.round(lD/dailyData.length*100):0;
+  const matched=dailyData.filter(d=>d.matched).length;
+  document.getElementById('mrow').innerHTML=`
+    <div class="mc"><div class="lbl">${T('empCount')}</div><div class="val">${emp}</div><div class="sub">${T('employees')}</div></div>
+    <div class="mc"><div class="lbl">${T('recCount')}</div><div class="val">${dailyData.length.toLocaleString()}</div><div class="sub">${T('records')}</div></div>
+    <div class="mc"><div class="lbl">${T('avgNet')}</div><div class="val">${hStr(aN)}</div><div class="sub">${T('lunchExcl')}</div></div>
+    <div class="mc ${lR>20?'danger':lR>10?'warn':''}"><div class="lbl">${T('lateRate')}</div><div class="val">${lR}%</div><div class="sub">${lD} ${T('occur')}</div></div>
+    <div class="mc ${defDays>dailyData.length*0.1?'danger':'warn'}"><div class="lbl">${T('deficitDays')}</div><div class="val">${defDays}</div><div class="sub">${T('occur')}</div></div>
+    <div class="mc"><div class="lbl">${T('matchRate')}</div><div class="val">${dailyData.length?Math.round(matched/dailyData.length*100):0}%</div><div class="sub">${T('badgeBasis')}</div></div>`;
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  const Tr = TRANSLATIONS[lang];
+
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`);
+  if(btn) btn.classList.add('active');
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(Tr[key] !== undefined) el.innerHTML = Tr[key];
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if(Tr[key] !== undefined) el.placeholder = Tr[key];
+  });
+
+  const statusSel = document.getElementById('s-status');
+  if(statusSel) {
+    const opts = statusSel.querySelectorAll('option');
+    const keys = ['allStatus','tagOk','tagLate','tagEarlyIn','tagEarlyOut','tagDef'];
+    opts.forEach((o,i) => { if(keys[i] && Tr[keys[i]]) o.textContent = Tr[keys[i]]; });
+  }
+
+  ['s-month','s-summonth'].forEach(id => {
+    const sel = document.getElementById(id);
+    if(sel && sel.options[0]) sel.options[0].textContent = lang==='ko'?'전체':lang==='en'?'All':'Tout';
+  });
+
+  if(dailyData.length) {
+    updateGlobalMetrics();
+    renderDaily();
+    renderSummary();
+    if(selectedEmp) openDetail(selectedEmp);
+  }
+}
+
+// Initialize language button on load (no re-render needed - no data yet)
+document.addEventListener('DOMContentLoaded', () => {
+  currentLang = 'ko';
+  const btn = document.querySelector(".lang-btn[onclick=\"setLang('ko')\"]");
+  if(btn) btn.classList.add('active');
+});
+
 const POLICY={inH:9.5,outH:18.5,outH_fri:18.0,lunchS:12.5,lunchE:14.0};
 function getRequired(ds){return new Date(ds).getDay()===5?7.0:7.5;}
 function getOutRef(ds){return new Date(ds).getDay()===5?POLICY.outH_fri:POLICY.outH;}
 function calcNet(i,o){if(o<=i)return 0;const ov=Math.max(0,Math.min(o,POLICY.lunchE)-Math.max(i,POLICY.lunchS));return Math.max(0,o-i-ov);}
 function calcDeficit(n,ds){if(n<=0)return 0;return Math.max(0,getRequired(ds)-n);}
 function hStr(h){if(!h||h<=0)return'—';const hr=Math.floor(h),mn=Math.round((h-hr)*60);return hr+'h'+String(mn).padStart(2,'0');}
-function minStr(m){if(!m||m<=0)return'—';const hr=Math.floor(m/60),mn=Math.round(m%60);return hr>0?(hr+'h'+String(mn).padStart(2,'0')):(mn+'분');}
+function minStr(m){if(!m||m<=0)return'—';const hr=Math.floor(m/60),mn=Math.round(m%60);return hr>0?(hr+'h'+String(mn).padStart(2,'0')):(mn+(T('minUnit')||'분'));}
 function tStr(h){if(h===null||h===undefined||isNaN(h))return'—';return String(Math.floor(h)).padStart(2,'0')+':'+String(Math.round((h%1)*60)).padStart(2,'0');}
 function avg(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:null;}
-const DK=['일','월','화','수','목','금','토'];
+// Day names via T('dow')
 // NOM Prénom 순서 (성 + 이름)
 function formatName(nom,pre){if(pre&&pre.trim())return nom.trim()+' '+pre.trim();return nom.trim();}
 // XSS 방지: 엑셀에서 읽은 데이터를 HTML에 넣기 전에 특수문자 이스케이프
@@ -337,6 +733,7 @@ let charts={},empCharts={},sortKey='date',sortDir=1,curPage=1;
 const PG=30;let selectedEmp=null;
 const EXCL=/^(invite|invité|syst.?aime|sophinfo|quartier|tour aurore|client av|déco|kkp|agent \d)/i;
 
+// ── Badge file parser ───────────────────────────────────
 function parseBadge(data){
   const wb=XLSX.read(data,{type:'array',cellDates:true});
   const sn=wb.SheetNames.find(s=>s.toLowerCase().includes('badge'))||wb.SheetNames[0];
@@ -370,6 +767,7 @@ function parseBadge(data){
   badgeMap=map;return Object.keys(map).length;
 }
 
+// ── Access log parser ───────────────────────────────────
 function parseAccess(data,fname){
   const wb=XLSX.read(data,{type:'array',cellDates:true});
   const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:null});
@@ -399,6 +797,7 @@ function parseAccess(data,fname){
   return recs;
 }
 
+// ── Badge → name resolver ───────────────────────────────
 function resolve(rec){
   if(rec.rawId&&badgeMap[rec.rawId]){const b=badgeMap[rec.rawId];if(b.excluded)return null;return{name:b.name,ifr:b.ifr||'—',matched:true};}
   const m=rec.rawUser.match(/IFR\s*(\d+)/i);
@@ -407,6 +806,7 @@ function resolve(rec){
   return{name:rec.rawUser,ifr:'?',matched:false};
 }
 
+// ── Main data processor ─────────────────────────────────
 function processAll(){
   if(!allRecords.length)return;
   const byPD={},unm={};
@@ -466,16 +866,10 @@ function processAll(){
   const aN=vN.length?vN.reduce((a,b)=>a+b.netH,0)/vN.length:0;
   const lR=dailyData.length?Math.round(lD/dailyData.length*100):0;
   const matched=dailyData.filter(d=>d.matched).length;
-  document.getElementById('mrow').innerHTML=`
-    <div class="mc"><div class="lbl">직원 수</div><div class="val">${emp}</div><div class="sub">명</div></div>
-    <div class="mc"><div class="lbl">출근 기록</div><div class="val">${dailyData.length.toLocaleString()}</div><div class="sub">건</div></div>
-    <div class="mc"><div class="lbl">평균 실근무</div><div class="val">${hStr(aN)}</div><div class="sub">점심 제외</div></div>
-    <div class="mc ${lR>20?'danger':lR>10?'warn':''}"><div class="lbl">지각 비율</div><div class="val">${lR}%</div><div class="sub">${lD}건</div></div>
-    <div class="mc ${defDays>dailyData.length*0.1?'danger':'warn'}"><div class="lbl">근무부족일</div><div class="val">${defDays}</div><div class="sub">건</div></div>
-    <div class="mc"><div class="lbl">매칭률</div><div class="val">${dailyData.length?Math.round(matched/dailyData.length*100):0}%</div><div class="sub">배지 기준</div></div>`;
+  updateGlobalMetrics();
 
   const uc=document.getElementById('unmatched-content');
-  uc.innerHTML='<div class="ul-row ul-hdr"><div>Identifiant</div><div>로그 표시명</div><div>건수</div></div>';
+  uc.innerHTML=`<div class="ul-row ul-hdr"><div>Identifiant</div><div>${T('tabUnmatched')||'로그 표시명'}</div><div>${T('records')||'건수'}</div></div>`;
   const ua=Object.values(unm).sort((a,b)=>b.count-a.count);
   if(!ua.length)uc.innerHTML+='<div class="ul-row"><div style="padding:1rem;color:var(--color-text-tertiary);grid-column:1/-1">미매칭 없음 ✓</div></div>';
   else ua.forEach(u=>uc.innerHTML+=`<div class="ul-row"><div>${esc(u.id)}</div><div>${esc(u.user)}</div><div>${u.count}건</div></div>`);
@@ -485,6 +879,7 @@ function processAll(){
   if(selectedEmp)openDetail(selectedEmp);
 }
 
+// ── Render: Daily table ─────────────────────────────────
 function getFD(){
   const q=(document.getElementById('s-name').value||'').toLowerCase();
   const fr=document.getElementById('s-from').value,to=document.getElementById('s-to').value;
@@ -504,26 +899,27 @@ function renderDaily(){
   const tb=document.getElementById('body-daily');tb.innerHTML='';
   if(!slice.length){tb.innerHTML='<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--color-text-tertiary)">데이터 없음</td></tr>';return;}
   slice.forEach(d=>{
-    const bdgs=d.tags.map(t=>`<span class="badge ${t==='지각'?'bl':t==='조기퇴근'?'beo':t==='조기출근'?'bei':t==='근무부족'?'bdef':'bok'}">${t}</span>`).join('');
-    const unm=!d.matched?`<span class="badge bw">미매칭</span>`:'';
-    const dateTd=d.isFri?`<span style="color:var(--color-text-warning)">${d.date} 금</span>`:d.date;
-    const lc=d.lateMin>0?`<span style="color:var(--color-text-danger)">+${d.lateMin}분</span>`:'—';
-    const dc=d.defMin>0?`<span style="color:var(--color-text-danger);font-weight:500">${d.defStr}</span>`:(d.solo?'—':`<span style="color:var(--color-text-success);font-size:11px">충족</span>`);
+    const bdgs=renderTags(d.tags);
+    const unm=!d.matched?`<span class="badge bw">${T('tagUnmatched')||'미매칭'}</span>`:'';
+    const dateTd=d.isFri?`<span style="color:var(--color-text-warning)">${d.date} ${T('fri')}</span>`:d.date;
+    const lc=d.lateMin>0?`<span class="txt-danger">+${d.lateMin}${T("minUnit")}</span>`:'—';
+    const dc=d.defMin>0?`<span class="txt-danger-bold">-${minStr(d.defMin)}</span>`:(d.solo?'—':`<span class="txt-success" style="font-size:11px">${T('satisfied')}</span>`);
     tb.innerHTML+=`<tr class="clickable" onclick="openDetail('${d.name.replace(/'/g,"\\'")}')">
       <td style="color:var(--color-text-info);text-decoration:underline;text-underline-offset:2px" title="${esc(d.name)}">${esc(d.name)}</td>
       <td>${d.ifr}</td><td>${dateTd}</td><td>${d.in}</td><td>${d.out}</td>
-      <td>${d.netStr}</td><td>${dc}</td><td>${lc}</td><td>${bdgs}${unm}</td></tr>`;
+      <td>${d.netH>0?hStr(d.netH):"—"}</td><td>${dc}</td><td>${lc}</td><td>${bdgs}${unm}</td></tr>`;
   });
   const pag=document.getElementById('pag-daily');
-  if(pages<=1){pag.innerHTML=`<span>${data.length}건</span>`;return;}
+  if(pages<=1){pag.innerHTML=`<span>${data.length} ${T("records")}</span>`;return;}
   let btns='';for(let p=1;p<=Math.min(pages,7);p++)btns+=`<button class="pb ${p===curPage?'active':''}" onclick="goP(${p})">${p}</button>`;
   if(pages>7)btns+=`<span style="padding:0 3px">...</span><button class="pb ${pages===curPage?'active':''}" onclick="goP(${pages})">${pages}</button>`;
-  pag.innerHTML=`<span>${data.length}건 중 ${(curPage-1)*PG+1}–${Math.min(curPage*PG,data.length)}</span><div class="pbtns">${btns}</div>`;
+  pag.innerHTML=`<span>${(curPage-1)*PG+1}–${Math.min(curPage*PG,data.length)} / ${data.length} ${T("records")}</span><div class="pbtns">${btns}</div>`;
 }
 function goP(p){curPage=p;renderDaily();}
 function sortD(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}curPage=1;renderDaily();}
 function resetF(){['s-name','s-from','s-to'].forEach(id=>document.getElementById(id).value='');['s-month','s-status'].forEach(id=>document.getElementById(id).value='');curPage=1;renderDaily();}
 
+// ── Render: Summary table ───────────────────────────────
 function renderSummary(){
   const q=(document.getElementById('s-sumname').value||'').toLowerCase();
   let data=summaryData;
@@ -532,10 +928,10 @@ function renderSummary(){
     <td style="color:var(--color-text-info);text-decoration:underline;text-underline-offset:2px" title="${esc(d.name)}">${esc(d.name)}</td>
     <td>${d.ifr}</td><td>${d.days}</td><td>${d.avgIn}</td><td>${d.avgOut}</td><td>${d.avgNet}</td>
     <td>${d.lateDays>0?`<span style="color:var(--color-text-danger)">${d.lateDays}</span>`:'0'}</td>
-    <td>${d.totalLate>0?`<span style="color:var(--color-text-danger)">${d.totalLate}분</span>`:'—'}</td>
+    <td>${d.totalLate>0?`<span style="color:var(--color-text-danger)">${d.totalLate}${T("minUnit")}</span>`:'—'}</td>
     <td>${d.earlyOuts>0?`<span style="color:var(--color-text-warning)">${d.earlyOuts}</span>`:'0'}</td>
-    <td>${d.totalDef>0?`<span style="color:var(--color-text-danger);font-weight:500">${d.totalDefStr}</span>`:'<span style="color:var(--color-text-success);font-size:11px">충족</span>'}</td>
-    <td>${d.defDays>0?`<span style="color:var(--color-text-danger)">${d.defDays}일</span>`:'0'}</td>
+    <td>${d.totalDef>0?`<span class="txt-danger-bold">-${minStr(d.totalDef)}</span>`:'<span style="color:var(--color-text-success);font-size:11px">'+T('satisfied')+'</span>'}</td>
+    <td>${d.defDays>0?`<span style="color:var(--color-text-danger)">${d.defDays}${T("dayUnit")}</span>`:'0'}</td>
   </tr>`).join('');
 }
 
@@ -543,27 +939,28 @@ function populateMonths(){
   const months=[...new Set(dailyData.map(d=>d.date.slice(0,7)))].sort();
   ['s-month','s-summonth'].forEach(id=>{
     const sel=document.getElementById(id);sel.innerHTML='<option value="">전체</option>';
-    months.forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;sel.appendChild(o);});
+    months.forEach(m=>{const o=Object.assign(document.createElement('option'),{value:m,textContent:m});sel.appendChild(o);});
   });
 }
 
+// ── Employee detail panel ───────────────────────────────
 function openDetail(name){
   selectedEmp=name;
   const empData=dailyData.filter(d=>d.name===name).sort((a,b)=>a.date.localeCompare(b.date));
   if(!empData.length)return;
   const sum=summaryData.find(s=>s.name===name)||{};
   document.getElementById('detail-name').textContent=esc(name);
-  document.getElementById('detail-sub').textContent=`배지: ${empData[0].ifr} | ${empData[0].date} ~ ${empData[empData.length-1].date}`;
+  document.getElementById('detail-sub').textContent=`${T('badgeSub')}: ${empData[0].ifr} | ${empData[0].date} ~ ${empData[empData.length-1].date}`;
   const defClass=sum.totalDef>120?'deficit':sum.totalDef>60?'warn':'';
   document.getElementById('emp-mrow').innerHTML=`
-    <div class="emp-mc"><div class="lbl">출근일수</div><div class="val">${sum.days||0}</div><div class="sub">일</div></div>
-    <div class="emp-mc"><div class="lbl">평균 출근</div><div class="val" style="font-size:13px">${sum.avgIn||'—'}</div></div>
-    <div class="emp-mc"><div class="lbl">평균 퇴근</div><div class="val" style="font-size:13px">${sum.avgOut||'—'}</div></div>
-    <div class="emp-mc"><div class="lbl">평균 실근무</div><div class="val" style="font-size:13px">${sum.avgNet||'—'}</div></div>
-    <div class="emp-mc ${(sum.lateDays||0)>5?'danger':(sum.lateDays||0)>2?'warn':''}"><div class="lbl">지각일수</div><div class="val">${sum.lateDays||0}</div><div class="sub">일</div></div>
-    <div class="emp-mc ${(sum.totalLate||0)>120?'danger':(sum.totalLate||0)>60?'warn':''}"><div class="lbl">총 지각</div><div class="val" style="font-size:13px">${sum.totalLate||0}분</div></div>
-    <div class="emp-mc ${defClass}"><div class="lbl">★ 총 근무부족</div><div class="val" style="font-size:13px">${sum.totalDef>0?sum.totalDefStr:'충족 ✓'}</div><div class="sub">${sum.defDays||0}일 발생</div></div>
-    <div class="emp-mc ${(sum.earlyOuts||0)>3?'warn':''}"><div class="lbl">조기퇴근</div><div class="val">${sum.earlyOuts||0}</div><div class="sub">회</div></div>`;
+    <div class="emp-mc"><div class="lbl">${T('workDays')}</div><div class="val">${sum.days||0}</div><div class="sub">${T('days')}</div></div>
+    <div class="emp-mc"><div class="lbl">${T('avgIn')}</div><div class="val" style="font-size:13px">${sum.avgIn||'—'}</div></div>
+    <div class="emp-mc"><div class="lbl">${T('avgOut')}</div><div class="val" style="font-size:13px">${sum.avgOut||'—'}</div></div>
+    <div class="emp-mc"><div class="lbl">${T('avgNetWork')}</div><div class="val" style="font-size:13px">${sum.avgNet||'—'}</div></div>
+    <div class="emp-mc ${(sum.lateDays||0)>5?'danger':(sum.lateDays||0)>2?'warn':''}"><div class="lbl">${T('lateDays')}</div><div class="val">${sum.lateDays||0}</div><div class="sub">${T('days')}</div></div>
+    <div class="emp-mc ${(sum.totalLate||0)>120?'danger':(sum.totalLate||0)>60?'warn':''}"><div class="lbl">${T('totalLate')}</div><div class="val" style="font-size:13px">${sum.totalLate||0}${T('minUnit')}</div></div>
+    <div class="emp-mc ${defClass}"><div class="lbl">${T('totalDeficit')}</div><div class="val" style="font-size:13px">${sum.totalDef>0?'-'+minStr(sum.totalDef):T('mSuff')}</div><div class="sub">${sum.defDays||0} ${T('occurred')}</div></div>
+    <div class="emp-mc ${(sum.earlyOuts||0)>3?'warn':''}"><div class="lbl">${T('earlyOut')}</div><div class="val">${sum.earlyOuts||0}</div><div class="sub">${T('timeUnit')}</div></div>`;
 
   const byMo={};
   empData.forEach(d=>{
@@ -578,12 +975,12 @@ function openDetail(name){
   Object.keys(byMo).sort().forEach(mo=>{
     const m=byMo[mo];const avgN=avg(m.nets);const hasD=m.totalDef>0;
     moHtml+=`<div class="month-box ${hasD?'deficit-box':''}">
-      <div class="m-title">${mo} ${hasD?'⚠ 부족':'✓'}</div>
-      <div class="m-row"><span class="m-key">출근일</span><span class="m-val">${m.days}일</span></div>
-      <div class="m-row"><span class="m-key">평균 실근무</span><span class="m-val">${avgN?hStr(avgN):'—'}</span></div>
-      <div class="m-row"><span class="m-key">지각</span><span class="m-val" style="color:${m.lateDays>0?'var(--color-text-danger)':'inherit'}">${m.lateDays}일 / ${m.totalLate}분</span></div>
-      <div class="m-row"><span class="m-key">★ 근무부족</span><span class="m-val" style="color:${hasD?'var(--color-text-danger)':'var(--color-text-success)'}">
-        ${hasD?m.defDays+'일 / -'+minStr(m.totalDef):'충족 ✓'}</span></div>
+      <div class="m-title">${mo} ${hasD?T('monthWarn'):T('monthOk')}</div>
+      <div class="m-row"><span class="m-key">${T('mDays')}</span><span class="m-val">${m.days}${T('dayUnit')}</span></div>
+      <div class="m-row"><span class="m-key">${T('mAvgNet')}</span><span class="m-val">${avgN?hStr(avgN):'—'}</span></div>
+      <div class="m-row"><span class="m-key">${T('mLate')}</span><span class="m-val" style="color:${m.lateDays>0?'var(--color-text-danger)':'inherit'}">${m.lateDays}${T('dayUnit')} / ${m.totalLate}${T('minUnit')}</span></div>
+      <div class="m-row"><span class="m-key">${T('mDef')}</span><span class="m-val" style="color:${hasD?'var(--color-text-danger)':'var(--color-text-success)'}">
+        ${hasD?m.defDays+' '+T('days')+' / -'+minStr(m.totalDef):T('mSuff')}</span></div>
     </div>`;
   });
   moHtml+='</div>';
@@ -600,11 +997,10 @@ function openDetail(name){
 }
 function closeDetail(){document.getElementById('detail-panel').style.display='none';selectedEmp=null;Object.values(empCharts).forEach(c=>c.destroy());empCharts={};}
 
-function cc(){const isDark=matchMedia('(prefers-color-scheme: dark)').matches;return{tc:isDark?'rgba(255,255,255,0.5)':'rgba(0,0,0,0.4)',gc:isDark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.05)'};}
 
 function buildTimeline(data){
-  const{tc,gc}=cc();
-  empCharts.tl=new Chart(document.getElementById('ch-emp-timeline'),{type:'line',data:{labels:data.map(d=>d.date.slice(5)+(d.isFri?'(금)':'')),datasets:[{label:'출근',data:data.map(d=>d.inH),borderColor:'#378ADD',backgroundColor:'#378ADD22',pointBackgroundColor:data.map(d=>d.lateMin>0?'#E24B4A':'#378ADD'),pointRadius:4,tension:0.2,fill:false},{label:'퇴근',data:data.map(d=>d.outH),borderColor:'#1D9E75',backgroundColor:'#1D9E7522',pointBackgroundColor:data.map(d=>d.defMin>0?'#A32D2D':d.earlyOut?'#EF9F27':'#1D9E75'),pointRadius:4,tension:0.2,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:tc,font:{size:11}}},tooltip:{callbacks:{label:(c)=>{const d=data[c.dataIndex];if(c.dataset.label==='출근')return'출근: '+tStr(c.parsed.y)+(d.lateMin>0?' (지각+'+d.lateMin+'분)':'');return'퇴근: '+tStr(c.parsed.y)+(d.defMin>0?' ⚠-'+minStr(d.defMin):'');    }}}},scales:{x:{ticks:{color:tc,font:{size:10},maxRotation:45,maxTicksLimit:20},grid:{color:gc}},y:{min:6,max:22,ticks:{color:tc,font:{size:10},callback:v=>tStr(v)},grid:{color:gc}}}}});
+  const{tc,gc}=chartColors();
+  empCharts.tl=new Chart(document.getElementById('ch-emp-timeline'),{type:'line',data:{labels:data.map(d=>d.date.slice(5)+(d.isFri?'('+T('fri')+')':'')),datasets:[{label:T('lateLabel'),data:data.map(d=>d.inH),borderColor:'#378ADD',backgroundColor:'#378ADD22',pointBackgroundColor:data.map(d=>d.lateMin>0?'#E24B4A':'#378ADD'),pointRadius:4,tension:0.2,fill:false},{label:T('departLabel'),data:data.map(d=>d.outH),borderColor:'#1D9E75',backgroundColor:'#1D9E7522',pointBackgroundColor:data.map(d=>d.defMin>0?'#A32D2D':d.earlyOut?'#EF9F27':'#1D9E75'),pointRadius:4,tension:0.2,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:tc,font:{size:11}}},tooltip:{callbacks:{label:(c)=>{const d=data[c.dataIndex];if(c.datasetIndex===0)return T('lateLabel')+': '+tStr(c.parsed.y)+(d.lateMin>0?' ('+T('lateTooltip')+d.lateMin+T('minUnit')+')':'');return T('departLabel')+': '+tStr(c.parsed.y)+(d.defMin>0?' ⚠-'+minStr(d.defMin):'');}}}},scales:{x:{ticks:{color:tc,font:{size:10},maxRotation:45,maxTicksLimit:20},grid:{color:gc}},y:{min:6,max:22,ticks:{color:tc,font:{size:10},callback:v=>tStr(v)},grid:{color:gc}}}}});
 }
 
 function buildCalendar(data){
@@ -614,7 +1010,7 @@ function buildCalendar(data){
   months.forEach(mo=>{
     const[y,m]=mo.split('-').map(Number);
     const firstDay=new Date(y,m-1,1).getDay();const lastDate=new Date(y,m,0).getDate();
-    html+=`<div class="cal-month"><div class="cal-month-title">${y}년 ${m}월</div><div class="cal-grid">`;
+    html+=`<div class="cal-month"><div class="cal-month-title">${y}${currentLang==="ko"?"년 ":"-"}${m}${currentLang==="ko"?"월":""}</div><div class="cal-grid">`;
     ['일','월','화','수','목','금','토'].forEach(d=>html+=`<div class="cal-day-hdr">${d}</div>`);
     for(let i=0;i<firstDay;i++)html+=`<div class="cal-day cal-empty"></div>`;
     for(let d=1;d<=lastDate;d++){
@@ -638,108 +1034,182 @@ function buildCalendar(data){
 }
 
 function buildMonthly(data){
-  const{tc,gc}=cc();
+  const{tc,gc}=chartColors();
   const byMo={};
   data.forEach(d=>{const mo=d.date.slice(0,7);if(!byMo[mo])byMo[mo]={late:0,earlyOut:0,def:0};if(d.lateMin>0)byMo[mo].late++;if(d.earlyOut)byMo[mo].earlyOut++;if(d.defMin>0)byMo[mo].def++;});
   const mos=Object.keys(byMo).sort();
-  empCharts.mo=new Chart(document.getElementById('ch-emp-monthly'),{type:'bar',data:{labels:mos,datasets:[{label:'지각',data:mos.map(m=>byMo[m].late),backgroundColor:'#E24B4A99',borderColor:'#E24B4A',borderWidth:1},{label:'조기퇴근',data:mos.map(m=>byMo[m].earlyOut),backgroundColor:'#EF9F2799',borderColor:'#EF9F27',borderWidth:1},{label:'★근무부족',data:mos.map(m=>byMo[m].def),backgroundColor:'#A32D2D99',borderColor:'#A32D2D',borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:tc,font:{size:11}}}},scales:{x:{ticks:{color:tc},grid:{display:false}},y:{ticks:{color:tc,stepSize:1},grid:{color:gc}}}}});
+  empCharts.mo=mkBarChart(document.getElementById('ch-emp-monthly'),mos,[
+    {label:T('chartLateLabel'),data:mos.map(m=>byMo[m].late),backgroundColor:'#E24B4A99',borderColor:'#E24B4A',borderWidth:1},
+    {label:T('chartEarlyOutLabel'),data:mos.map(m=>byMo[m].earlyOut),backgroundColor:'#EF9F2799',borderColor:'#EF9F27',borderWidth:1},
+    {label:T('chartDefLabel'),data:mos.map(m=>byMo[m].def),backgroundColor:'#A32D2D99',borderColor:'#A32D2D',borderWidth:1}
+  ],{legend:true,xGrid:{display:false},yTicks:{stepSize:1}});
 }
 
 function buildDist(data){
-  const{tc,gc}=cc();
+  const{tc,gc}=chartColors();
   const bins={};data.forEach(d=>{const k=Math.floor(d.inH*4)/4;bins[k]=(bins[k]||0)+1;});
   const keys=Object.keys(bins).map(Number).sort((a,b)=>a-b);
-  empCharts.dist=new Chart(document.getElementById('ch-emp-dist'),{type:'bar',data:{labels:keys.map(k=>tStr(k)),datasets:[{label:'출근 횟수',data:keys.map(k=>bins[k]),backgroundColor:keys.map(k=>k>POLICY.inH?'#E24B4A99':'#378ADD99'),borderColor:keys.map(k=>k>POLICY.inH?'#E24B4A':'#378ADD'),borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,maxRotation:45},grid:{display:false}},y:{ticks:{color:tc,stepSize:1},grid:{color:gc}}}}});
+  empCharts.dist=mkBarChart(document.getElementById('ch-emp-dist'),keys.map(k=>tStr(k)),
+    [{label:T('chartArrLabel'),data:keys.map(k=>bins[k]),
+      backgroundColor:keys.map(k=>k>POLICY.inH?'#E24B4A99':'#378ADD99'),
+      borderColor:keys.map(k=>k>POLICY.inH?'#E24B4A':'#378ADD'),borderWidth:1}],
+    {xTicks:{maxRotation:45},xGrid:{display:false},yTicks:{stepSize:1}});
 }
 
 function buildLog(data){
   document.getElementById('emp-log-body').innerHTML=data.slice().reverse().map(d=>{
-    const bdgs=d.tags.map(t=>`<span class="badge ${t==='지각'?'bl':t==='조기퇴근'?'beo':t==='조기출근'?'bei':t==='근무부족'?'bdef':'bok'}">${t}</span>`).join('');
-    const lc=d.lateMin>0?`<span style="color:var(--color-text-danger)">+${d.lateMin}분</span>`:'—';
-    const dc=d.defMin>0?`<span style="color:var(--color-text-danger);font-weight:500">${d.defStr}</span>`:(d.solo?'—':'<span style="color:var(--color-text-success);font-size:10px">✓충족</span>');
+    const bdgs=renderTags(d.tags);
+    const lc=d.lateMin>0?`<span class="txt-danger">+${d.lateMin}${T("minUnit")}</span>`:'—';
+    const dc=d.defMin>0?`<span class="txt-danger-bold">-${minStr(d.defMin)}</span>`:(d.solo?'—':`<span class="txt-success" style="font-size:10px">✓${T('satisfied')}</span>`);
     const outCell=d.isFri&&!d.solo?`${d.out}<span style="font-size:9px;color:var(--color-text-warning)"> (18:00)</span>`:d.out;
-    return`<tr><td>${d.date}</td><td style="color:${d.isFri?'var(--color-text-warning)':'inherit'}">${DK[d.dow]}</td><td>${d.in}</td><td>${outCell}</td><td>${d.netStr}</td><td>${dc}</td><td>${lc}</td><td>${bdgs}</td></tr>`;
+    const _dow=T('dow');return`<tr><td>${d.date}</td><td style="color:${d.isFri?'var(--color-text-warning)':'inherit'}">${_dow[d.dow]}</td><td>${d.in}</td><td>${outCell}</td><td>${d.netH>0?hStr(d.netH):"—"}</td><td>${dc}</td><td>${lc}</td><td>${bdgs}</td></tr>`;
   }).join('');
 }
 
-document.querySelectorAll('.emp-tab').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.emp-tab').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.emp-tc').forEach(x=>x.classList.remove('active'));
-    t.classList.add('active');document.getElementById('etab-'+t.dataset.etab).classList.add('active');
-  });
-});
+initTabs('.emp-tab','.emp-tc','etab','etab-');
 
+// ── Global statistics charts ────────────────────────────
 function renderCharts(){
   Object.values(charts).forEach(c=>c.destroy());charts={};
-  const{tc,gc}=cc();
+  const{tc,gc}=chartColors();
   const byDate={};dailyData.forEach(d=>{byDate[d.date]=(byDate[d.date]||0)+1;});
   const allDates=Object.keys(byDate).sort().filter(d=>{const dow=new Date(d).getDay();return dow!==0&&dow!==6;});
   const tickStep=allDates.length>60?7:allDates.length>30?3:allDates.length>15?2:1;
-  charts.d=new Chart(document.getElementById('ch-daily'),{type:'bar',data:{labels:allDates,datasets:[{label:'출근',data:allDates.map(d=>byDate[d]),backgroundColor:'#378ADD99',borderColor:'#378ADD',borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:10},maxRotation:45,autoSkip:false,callback:function(val,idx){return idx%tickStep===0?this.getLabelForValue(val):''}},grid:{display:false}},y:{ticks:{color:tc,stepSize:1},grid:{color:gc}}}}});
+  charts.d=mkBarChart(document.getElementById('ch-daily'),allDates,
+    [{label:T('lateLabel'),data:allDates.map(d=>byDate[d]),backgroundColor:'#378ADD99',borderColor:'#378ADD',borderWidth:1}],
+    {xTicks:{font:{size:10},maxRotation:45,autoSkip:false,callback:function(val,idx){return idx%tickStep===0?this.getLabelForValue(val):''}},
+     xGrid:{display:false},yTicks:{stepSize:1}});
 
   const wdDailyCount={0:[],1:[],2:[],3:[],4:[],5:[],6:[]};
   allDates.forEach(ds=>{const dow=new Date(ds).getDay();wdDailyCount[dow].push(byDate[ds]||0);});
   const wdAvgs=DK.map((_,i)=>{const a=wdDailyCount[i];return a.length?Math.round(a.reduce((x,y)=>x+y,0)/a.length*10)/10:0;});
-  charts.w=new Chart(document.getElementById('ch-wd'),{type:'bar',data:{labels:DK,datasets:[{label:'평균',data:wdAvgs,backgroundColor:'#1D9E7599',borderColor:'#1D9E75',borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>'평균 '+c.parsed.y+'명 ('+wdDailyCount[c.dataIndex].length+'일 기준)'}}},scales:{x:{ticks:{color:tc},grid:{display:false}},y:{ticks:{color:tc,stepSize:5},grid:{color:gc},beginAtZero:true}}}});
+  charts.w=mkBarChart(document.getElementById('ch-wd'),T('dow'),
+    [{label:T('chartAvgLabel'),data:wdAvgs,backgroundColor:'#1D9E7599',borderColor:'#1D9E75',borderWidth:1}],
+    {xGrid:{display:false},yTicks:{stepSize:5},beginAtZero:true,
+     tooltip:{callbacks:{label:(c)=>T('chartAvgLabel')+': '+c.parsed.y+' ('+wdDailyCount[c.dataIndex].length+'d)'}}}
+  );
 
   const hb=new Array(24).fill(0);dailyData.forEach(d=>{if(d.inH>=0&&d.inH<24)hb[Math.floor(d.inH)]++;});
-  charts.h=new Chart(document.getElementById('ch-hr'),{type:'bar',data:{labels:Array.from({length:24},(_,i)=>i+':00'),datasets:[{label:'출근',data:hb,backgroundColor:hb.map((_,i)=>i>=10?'#E24B4A99':'#378ADD99'),borderColor:hb.map((_,i)=>i>=10?'#E24B4A':'#378ADD'),borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:10},maxRotation:45},grid:{display:false}},y:{ticks:{color:tc},grid:{color:gc}}}}});
+  charts.h=mkBarChart(document.getElementById('ch-hr'),
+    Array.from({length:24},(_,i)=>i+':00'),
+    [{label:T('chartArrLabel'),data:hb,
+      backgroundColor:hb.map((_,i)=>i>=10?'#E24B4A99':'#378ADD99'),
+      borderColor:hb.map((_,i)=>i>=10?'#E24B4A':'#378ADD'),borderWidth:1}],
+    {xTicks:{font:{size:10},maxRotation:45},xGrid:{display:false}});
 
   const lP={};dailyData.forEach(d=>{if(!lP[d.name])lP[d.name]={t:0,c:0};if(d.lateMin>0){lP[d.name].t+=d.lateMin;lP[d.name].c++;}});
   const la=Object.entries(lP).filter(([,v])=>v.c>0).map(([n,v])=>({name:n,avg:Math.round(v.t/v.c)})).sort((a,b)=>b.avg-a.avg).slice(0,20);
-  if(la.length){const h=Math.max(200,la.length*32+60);document.getElementById('ch-late').parentElement.style.height=h+'px';charts.late=new Chart(document.getElementById('ch-late'),{type:'bar',data:{labels:la.map(x=>x.name),datasets:[{label:'평균 지각(분)',data:la.map(x=>x.avg),backgroundColor:'#D85A3099',borderColor:'#D85A30',borderWidth:1}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc},grid:{color:gc}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});}
+  if(la.length){
+    document.getElementById('ch-late').parentElement.style.height=Math.max(200,la.length*32+60)+'px';
+    charts.late=mkBarChart(document.getElementById('ch-late'),la.map(x=>x.name),
+      [{label:T('chartLateMinLabel'),data:la.map(x=>x.avg),backgroundColor:'#D85A3099',borderColor:'#D85A30',borderWidth:1}],
+      {horizontal:true,yTicks:{font:{size:11}},yGrid:{display:false}});
+  }
 
   const dP={};dailyData.forEach(d=>{if(!dP[d.name])dP[d.name]=0;dP[d.name]+=d.defMin;});
   const da=Object.entries(dP).filter(([,v])=>v>0).map(([n,v])=>({name:n,total:Math.round(v)})).sort((a,b)=>b.total-a.total).slice(0,20);
-  if(da.length){const h=Math.max(200,da.length*32+60);document.getElementById('ch-def').parentElement.style.height=h+'px';charts.def=new Chart(document.getElementById('ch-def'),{type:'bar',data:{labels:da.map(x=>x.name),datasets:[{label:'총 부족분(분)',data:da.map(x=>x.total),backgroundColor:'#A32D2D88',borderColor:'#A32D2D',borderWidth:1}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>minStr(c.parsed.x)+' 부족'}}},scales:{x:{ticks:{color:tc,callback:v=>minStr(v)},grid:{color:gc}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});}
+  if(da.length){
+    document.getElementById('ch-def').parentElement.style.height=Math.max(200,da.length*32+60)+'px';
+    charts.def=mkBarChart(document.getElementById('ch-def'),da.map(x=>x.name),
+      [{label:T('chartDefMinLabel'),data:da.map(x=>x.total),backgroundColor:'#A32D2D88',borderColor:'#A32D2D',borderWidth:1}],
+      {horizontal:true,yTicks:{font:{size:11}},yGrid:{display:false},
+       xTicks:{callback:v=>minStr(v)},
+       tooltip:{callbacks:{label:(c)=>minStr(c.parsed.x)+T('defSuffix')}}});
+  }
 }
 
+// ── PDF export ──────────────────────────────────────────
 function printEmployee(){
   if(!selectedEmp)return;
-  const name=selectedEmp;const sum=summaryData.find(s=>s.name===name)||{};
+  const name=selectedEmp;
+  const sum=summaryData.find(s=>s.name===name)||{};
   const empData=dailyData.filter(d=>d.name===name).sort((a,b)=>a.date.localeCompare(b.date));
+  const dow=T('dow');
+
+  // Tag display mapping for PDF
   const rows=empData.map(d=>`<tr style="border-bottom:1px solid #eee">
     <td style="padding:5px 8px">${d.date}</td>
-    <td style="padding:5px 8px;color:${d.isFri?'#e67e22':'#555'}">${DK[d.dow]}</td>
+    <td style="padding:5px 8px;color:${d.isFri?'#e67e22':'#555'}">${dow[d.dow]}</td>
     <td style="padding:5px 8px">${d.in}</td>
-    <td style="padding:5px 8px">${d.out}${d.isFri?' <small>(18:00)</small>':''}</td>
+    <td style="padding:5px 8px">${d.out}${d.isFri?' <small>('+T('outH_fri')+')</small>':''}</td>
     <td style="padding:5px 8px">${d.netStr}</td>
-    <td style="padding:5px 8px;color:${d.defMin>0?'#c0392b':'#27ae60'}">${d.defMin>0?d.defStr:'충족 ✓'}</td>
-    <td style="padding:5px 8px;color:${d.lateMin>0?'#c0392b':'inherit'}">${d.lateMin>0?'+'+d.lateMin+'분':'—'}</td>
-    <td style="padding:5px 8px">${d.tags.join(', ')}</td>
+    <td style="padding:5px 8px;color:${d.defMin>0?'#c0392b':'#27ae60'}">${d.defMin>0?'-'+minStr(d.defMin):T('mSuff')}</td>
+    <td style="padding:5px 8px;color:${d.lateMin>0?'#c0392b':'inherit'}">${d.lateMin>0?'+'+d.lateMin+T('minUnit'):'—'}</td>
+    <td style="padding:5px 8px">${d.tags.map(tagLabel).join(', ')}</td>
   </tr>`).join('');
+
+  const locale=T('pdfLocale')||'ko-KR';
+  const genDate=new Date().toLocaleDateString(locale);
+
   const win=window.open('','_blank');
-  win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${name} 출퇴근 리포트</title>
-  <style>body{font-family:Arial,sans-serif;padding:24px;color:#222;max-width:860px;margin:0 auto}h1{font-size:20px;margin-bottom:4px}h2{font-size:13px;color:#666;font-weight:normal;margin-bottom:14px}.cards{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.card{border:1px solid #e0e0e0;border-radius:6px;padding:8px 12px;min-width:90px}.card.red{border-color:#e74c3c;background:#fdf3f3}.card .l{font-size:10px;color:#888;margin-bottom:2px}.card .v{font-size:16px;font-weight:600}table{width:100%;border-collapse:collapse;font-size:12px}th{background:#f5f5f5;padding:6px 8px;text-align:left;font-weight:600;border-bottom:2px solid #ddd}.policy{font-size:11px;color:#888;margin-bottom:12px;padding:7px;background:#f9f9f9;border-radius:4px}.footer{margin-top:18px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:8px}@media print{button{display:none}}</style></head><body>
-  <h1>${name} — 출퇴근 리포트</h1><h2>배지: ${empData[0]?.ifr||'—'} | ${empData[0]?.date||''} ~ ${empData[empData.length-1]?.date||''}</h2>
-  <div class="policy">출근 기준 09:30 | 퇴근 기준 18:30 (금요일 18:00) | 점심 12:30–14:00 제외 | 소정근무 월~목 7h30 / 금 7h00</div>
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8">
+  <title>${name} — ${T('pdfTitle')}</title>
+  <style>
+    body{font-family:Arial,sans-serif;padding:24px;color:#222;max-width:860px;margin:0 auto}
+    h1{font-size:20px;margin-bottom:4px}
+    h2{font-size:13px;color:#666;font-weight:normal;margin-bottom:14px}
+    .cards{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+    .card{border:1px solid #e0e0e0;border-radius:6px;padding:8px 12px;min-width:90px}
+    .card.red{border-color:#e74c3c;background:#fdf3f3}
+    .card .l{font-size:10px;color:#888;margin-bottom:2px}
+    .card .v{font-size:16px;font-weight:600}
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th{background:#f5f5f5;padding:6px 8px;text-align:left;font-weight:600;border-bottom:2px solid #ddd}
+    td{padding:5px 8px;border-bottom:1px solid #eee}
+    .policy{font-size:11px;color:#888;margin-bottom:12px;padding:7px;background:#f9f9f9;border-radius:4px}
+    .footer{margin-top:18px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:8px}
+    @media print{button{display:none}}
+  </style></head><body>
+  <h1>${name} — ${T('pdfTitle')}</h1>
+  <h2>${T('pdfBadge')}: ${empData[0]?.ifr||'—'} | ${empData[0]?.date||''} ~ ${empData[empData.length-1]?.date||''}</h2>
+  <div class="policy">${T('pdfPolicy')}</div>
   <div class="cards">
-    <div class="card"><div class="l">출근일수</div><div class="v">${sum.days||0}일</div></div>
-    <div class="card"><div class="l">평균 출근</div><div class="v">${sum.avgIn||'—'}</div></div>
-    <div class="card"><div class="l">평균 퇴근</div><div class="v">${sum.avgOut||'—'}</div></div>
-    <div class="card"><div class="l">평균 실근무</div><div class="v">${sum.avgNet||'—'}</div></div>
-    <div class="card ${(sum.lateDays||0)>0?'red':''}"><div class="l">지각일수</div><div class="v" style="color:${(sum.lateDays||0)>0?'#c0392b':'inherit'}">${sum.lateDays||0}일</div></div>
-    <div class="card ${(sum.totalLate||0)>0?'red':''}"><div class="l">총 지각</div><div class="v" style="color:${(sum.totalLate||0)>0?'#c0392b':'inherit'}">${sum.totalLate||0}분</div></div>
-    <div class="card ${(sum.totalDef||0)>0?'red':''}"><div class="l">★총 근무부족</div><div class="v" style="color:${(sum.totalDef||0)>0?'#c0392b':'#27ae60'}">${sum.totalDef>0?sum.totalDefStr:'충족 ✓'}</div></div>
-    <div class="card"><div class="l">조기퇴근</div><div class="v">${sum.earlyOuts||0}회</div></div>
+    <div class="card"><div class="l">${T('pdfWorkDays')}</div><div class="v">${sum.days||0}${T('dayUnit')}</div></div>
+    <div class="card"><div class="l">${T('pdfAvgIn')}</div><div class="v">${sum.avgIn||'—'}</div></div>
+    <div class="card"><div class="l">${T('pdfAvgOut')}</div><div class="v">${sum.avgOut||'—'}</div></div>
+    <div class="card"><div class="l">${T('pdfAvgNet')}</div><div class="v">${sum.avgNet||'—'}</div></div>
+    <div class="card ${(sum.lateDays||0)>0?'red':''}">
+      <div class="l">${T('pdfLateDays')}</div>
+      <div class="v" style="color:${(sum.lateDays||0)>0?'#c0392b':'inherit'}">${sum.lateDays||0}${T('dayUnit')}</div>
+    </div>
+    <div class="card ${(sum.totalLate||0)>0?'red':''}">
+      <div class="l">${T('pdfTotalLate')}</div>
+      <div class="v" style="color:${(sum.totalLate||0)>0?'#c0392b':'inherit'}">${sum.totalLate||0}${T('minUnit')}</div>
+    </div>
+    <div class="card ${(sum.totalDef||0)>0?'red':''}">
+      <div class="l">${T('pdfTotalDef')}</div>
+      <div class="v" style="color:${(sum.totalDef||0)>0?'#c0392b':'#27ae60'}">${sum.totalDef>0?'-'+minStr(sum.totalDef):T('mSuff')}</div>
+    </div>
+    <div class="card"><div class="l">${T('pdfEarlyOut')}</div><div class="v">${sum.earlyOuts||0}${T('timeUnit')}</div></div>
   </div>
-  <table><thead><tr><th>날짜</th><th>요일</th><th>출근</th><th>퇴근</th><th>실근무</th><th>★부족분</th><th>지각</th><th>상태</th></tr></thead><tbody>${rows}</tbody></table>
-  <div class="footer">INNOCEAN France 출퇴근 리포트 | 생성일: ${new Date().toLocaleDateString('ko-KR')}</div>
-  <script>window.onload=()=>window.print()<\/script></body></html>`);
+  <table>
+    <thead><tr>
+      <th>${T('pdfColDate')}</th><th>${T('pdfColDow')}</th>
+      <th>${T('pdfColIn')}</th><th>${T('pdfColOut')}</th>
+      <th>${T('pdfColNet')}</th><th>${T('pdfColDef')}</th>
+      <th>${T('pdfColLate')}</th><th>${T('pdfColStatus')}</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <div class="footer">${T('pdfFooter')} | ${T('pdfGenerated')}: ${genDate}</div>
+  <script>window.onload=()=>window.print()<\/script>
+  </body></html>`);
   win.document.close();
 }
 
+// ── CSV export ──────────────────────────────────────────
 function exportCSV(){
   const data=getFD();
-  const rows=[['직원명','배지','날짜','요일','출근','퇴근','실근무','부족분','지각(분)','상태','매칭']];
-  data.forEach(d=>rows.push([d.name,d.ifr,d.date,DK[d.dow],d.in,d.out,d.netStr,d.defStr,d.lateMin||0,d.tags.join('/'),d.matched?'O':'미매칭']));
+  const dow=T('dow');
+  const rows=[T('csvHeaders')];
+  data.forEach(d=>rows.push([d.name,d.ifr,d.date,dow[d.dow],d.in,d.out,d.netH>0?hStr(d.netH):'—',d.defMin>0?'-'+minStr(d.defMin):'—',d.lateMin||0,d.tags.map(tagLabel).join('/'),d.matched?T('csvMatched'):T('csvUnmatched')]));
   const csv=rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
   a.download='innocean_attendance_v5.csv';a.click();
 }
 
+// ── UI utilities ────────────────────────────────────────
 function showS(msg,type){const el=document.getElementById('sbar');el.textContent=msg;el.className='sbar '+type;el.style.display='block';if(type==='so')setTimeout(()=>el.style.display='none',4000);}
 function addFTag(name,badge,extra){
   const row=document.getElementById('ftags');const eid='ft-'+name.replace(/[^a-z0-9]/gi,'_');const ex=document.getElementById(eid);if(ex)ex.remove();
@@ -748,9 +1218,14 @@ function addFTag(name,badge,extra){
   badge?row.insertBefore(d,row.firstChild):row.appendChild(d);
 }
 function removeF(name,isBadge){
-  const eid='ft-'+name.replace(/[^a-z0-9]/gi,'_');const el=document.getElementById(eid);if(el)el.remove();
-  if(isBadge){badgeMap={};document.getElementById('badge-icon').textContent='🏷️';document.getElementById('drop-badge').classList.remove('loaded');}
-  else accessFiles=accessFiles.filter(f=>f.name!==name);
+  document.getElementById('ft-'+name.replace(/[^a-z0-9]/gi,'_'))?.remove();
+  if(isBadge){
+    badgeMap={};
+    document.getElementById('badge-icon').textContent='🏷️';
+    document.getElementById('drop-badge').classList.remove('loaded');
+  } else {
+    accessFiles=accessFiles.filter(f=>f.name!==name);
+  }
   rebuildAll();
 }
 function rebuildAll(){allRecords=[];accessFiles.forEach(f=>allRecords.push(...f.records));if(allRecords.length)processAll();else document.getElementById('main').style.display='none';}
@@ -758,7 +1233,7 @@ function rebuildAll(){allRecords=[];accessFiles.forEach(f=>allRecords.push(...f.
 document.getElementById('fi-badge').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;
   const fr=new FileReader();
-  fr.onload=ev=>{try{const cnt=parseBadge(ev.target.result);document.getElementById('drop-badge').classList.add('loaded');document.getElementById('badge-icon').textContent='✅';addFTag(f.name,true,cnt+'개');showS(`배지 완료 — ${cnt}개 인식`,'so');rebuildAll();}catch(err){showS('오류: '+err.message,'se');}};
+  fr.onload=ev=>{try{const cnt=parseBadge(ev.target.result);document.getElementById('drop-badge').classList.add('loaded');document.getElementById('badge-icon').textContent='✅';addFTag(f.name,true,cnt+(currentLang==='ko'?'개':' badges'));showS(`배지 완료 — ${cnt}개 인식`,'so');rebuildAll();}catch(err){showS('오류: '+err.message,'se');}};
   fr.readAsArrayBuffer(f);e.target.value='';
 });
 document.getElementById('fi-access').addEventListener('change',e=>{handleAccess(e.target.files);e.target.value='';});
@@ -776,7 +1251,7 @@ dzb.addEventListener('drop',e=>{
   const f=e.dataTransfer.files[0];
   if(!f||!f.name.endsWith('.xlsx'))return;
   const fr=new FileReader();
-  fr.onload=ev=>{try{const cnt=parseBadge(ev.target.result);dzb.classList.add('loaded');document.getElementById('badge-icon').textContent='✅';addFTag(f.name,true,cnt+'개');showS(`배지 완료 — ${cnt}개 인식`,'so');rebuildAll();}catch(err){showS('오류: '+err.message,'se');}};
+  fr.onload=ev=>{try{const cnt=parseBadge(ev.target.result);dzb.classList.add('loaded');document.getElementById('badge-icon').textContent='✅';addFTag(f.name,true,cnt+(currentLang==='ko'?'개':' badges'));showS(`배지 완료 — ${cnt}개 인식`,'so');rebuildAll();}catch(err){showS('오류: '+err.message,'se');}};
   fr.readAsArrayBuffer(f);
 });
 function handleAccess(files){
@@ -784,20 +1259,28 @@ function handleAccess(files){
     if(!f.name.endsWith('.xlsx'))continue;
     if(accessFiles.find(af=>af.name===f.name))continue;
     const fr=new FileReader();
-    fr.onload=ev=>{try{const recs=parseAccess(ev.target.result,f.name);accessFiles.push({name:f.name,records:recs});addFTag(f.name,false,recs.length.toLocaleString()+'건');allRecords.push(...recs);processAll();showS(f.name+' 완료','so');}catch(err){showS('오류: '+f.name+' — '+err.message,'se');}};
+    fr.onload=ev=>{try{const recs=parseAccess(ev.target.result,f.name);accessFiles.push({name:f.name,records:recs});addFTag(f.name,false,recs.length.toLocaleString()+' '+T('records'));allRecords.push(...recs);processAll();showS(f.name+' 완료','so');}catch(err){showS('오류: '+f.name+' — '+err.message,'se');}};
     fr.readAsArrayBuffer(f);
   }
 }
-document.querySelectorAll('.tab').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.tc').forEach(x=>x.classList.remove('active'));
-    t.classList.add('active');document.getElementById('tab-'+t.dataset.tab).classList.add('active');
-    if(t.dataset.tab==='stats')setTimeout(renderCharts,50);
+// Tab switcher factory
+function initTabs(tabSel,panelSel,dataKey,idPrefix,onSwitch){
+  document.querySelectorAll(tabSel).forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelectorAll(tabSel).forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll(panelSel).forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      document.getElementById(idPrefix+t.dataset[dataKey])?.classList.add('active');
+      onSwitch?.(t.dataset[dataKey]);
+    });
   });
-});
-['s-name','s-from','s-to','s-month','s-status'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{curPage=1;renderDaily();}));
-['s-sumname','s-summonth'].forEach(id=>document.getElementById(id).addEventListener('input',renderSummary));
+}
+initTabs('.tab','.tc','tab','tab-',k=>k==='stats'&&setTimeout(renderCharts,50));
+[
+  [['s-name','s-from','s-to','s-month','s-status'],()=>{curPage=1;renderDaily();}],
+  [['s-sumname','s-summonth'],renderSummary],
+].forEach(([ids,fn])=>ids.forEach(id=>document.getElementById(id)?.addEventListener('input',fn)));
+
 </script>
 </body>
 </html>

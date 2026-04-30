@@ -1,55 +1,48 @@
 # 🏢 INNOCEAN France — Attendance Tracking System
-# Suivi des présences / 출퇴근 분석 시스템
+### Suivi des présences / 출퇴근 분석 시스템
 
 > **Automated employee attendance analysis tool** built for internal HR management.  
-> **Outil d'analyse des entrées/sorties des employés** développé pour la gestion RH interne.  
+> **Outil d'analyse des entrées/sorties** développé pour la gestion RH interne.  
 > 직원 출입 로데이터를 기반으로 출퇴근 현황을 자동 분석하는 웹 애플리케이션입니다.
+
+🌐 **Trilingual interface** — 🇰🇷 한국어 / 🇬🇧 English / 🇫🇷 Français  
+🔒 **100% client-side** — no server, no database, no data ever leaves the browser
 
 ---
 
 ## ✨ Features / Fonctionnalités / 주요 기능
 
-### 📊 Global Dashboard / Tableau de bord global / 전체 대시보드
-- Employee count, late arrival rate, average working hours
-- Nombre d'employés, taux de retards, heures travaillées moyennes
-- 직원 수, 지각 비율, 평균 실근무시간 요약 카드
+### 📊 Global Dashboard / Tableau de bord / 전체 대시보드
+- Employee count, late rate, avg net hours, hour deficit days, match rate
+- Nombre d'employés, taux de retards, heures nettes moyennes
+- 직원 수, 지각 비율, 평균 실근무시간, 근무부족일, 매칭률
 
-### 📋 Daily Attendance Log / Suivi quotidien / 일별 출퇴근
-- Automatic calculation of arrival (first badge) and departure (last badge)
-- Detection of late arrivals, early departures, and **working hour deficits**
-- Calcul automatique de l'heure d'arrivée (1er badge) et de départ (dernier badge)
-- Détection des retards, départs anticipés, **déficit d'heures travaillées**
-- 출근(첫 기록) / 퇴근(마지막 기록) 자동 계산
-- 지각, 조기퇴근, **★ 실근무 부족분** 자동 감지
+### 📋 Daily Attendance Log / Journal quotidien / 일별 출퇴근
+- Auto-calculates arrival (first badge) and departure (last badge) per day
+- Detects late arrivals, early departures, **working hour deficits**
+- Calcul automatique arrivée/départ, détection retards et **déficits horaires**
+- 출근(첫 기록)/퇴근(마지막 기록) 자동 계산, 지각·조기퇴근·**★ 실근무 부족분** 감지
 
-### 👤 Individual Employee Dashboard / Fiche individuelle / 직원별 상세 분석
-- Daily arrival/departure timeline chart
-- Monthly calendar view (color-coded by status)
-- Monthly trend chart for late arrivals and hour deficits
-- Arrival time distribution histogram
-- Timeline quotidien entrée/sortie (graphique)
-- Vue calendrier mensuel (couleurs par statut)
-- 일별 출퇴근 타임라인 차트
-- 월별 캘린더 뷰 (색상으로 상태 표시)
-- 월별 지각/근무부족 추이 차트
-- 출근 시간대 분포 히스토그램
+### 👤 Individual Dashboard / Fiche individuelle / 직원별 상세
+- Daily arrival/departure **timeline chart** with colour-coded anomalies
+- **Calendar view** — colour per day (on time / late / early out / deficit)
+- Monthly trend chart (late days, early outs, deficits)
+- Arrival time **distribution histogram**
+- Per-employee **PDF report** (print-ready, in selected language)
+- Chronologie quotidienne, calendrier mensuel, PDF par employé
+- 일별 타임라인, 월별 캘린더, 출근 분포, PDF 리포트
 
-### 📈 Global Statistics / Statistiques globales / 전체 통계
-- Daily attendance count (weekdays only)
-- Average attendance by day of week
-- Arrival time distribution
-- **Top 20 employees by average late minutes**
-- **Top 20 employees by cumulative hour deficit** ← identifies underperformers
-- Présence par date (jours ouvrés uniquement)
-- **Top 20 retards moyens / Top 20 déficits horaires cumulés** ← détecte les "tire-au-flanc"
-- 날짜별/요일별 출근 인원
-- **지각 Top 20 / 근무부족 Top 20** ← 월급루팡 탐지
+### 📈 Global Statistics / Statistiques / 전체 통계
+- Daily headcount (weekdays only), average by day of week
+- **Top 20 avg late minutes** per employee
+- **Top 20 cumulative hour deficit** per employee ← identifies underperformers
+- Top 20 retards / Top 20 déficits cumulés ← détecte les "tire-au-flanc"
+- 지각 Top 20 / 근무부족 Top 20 ← 월급루팡 탐지
 
 ### 🖨️ Export / 내보내기
-- Per-employee PDF report (built-in print button)
-- Full CSV export with all columns
-- PDF / impression par employé (bouton intégré)
-- 직원별 PDF 인쇄 / 전체 CSV 다운로드
+- Per-employee **PDF** report — fully translated in active language
+- **CSV** export with all columns (name, badge, date, times, deficit, status)
+- PDF par employé traduit, export CSV complet
 
 ---
 
@@ -57,50 +50,34 @@
 
 | Item | Rule |
 |------|------|
-| Start time threshold | 09:30 |
-| End time threshold | 18:30 (Mon–Thu) / **18:00 (Friday)** |
+| Start threshold | 09:30 (all days) |
+| End threshold | 18:30 Mon–Thu / **18:00 Friday** |
 | Lunch break | 12:30 – 14:00 (excluded from net hours) |
 | Required hours | Mon–Thu **7h30** / Fri **7h00** |
-| Hour deficit | Required hours − Actual hours (only when positive) |
+| Hour deficit | Required − Actual (positive values only) |
 
 ---
 
 ## 🚀 How to Use / Utilisation / 사용 방법
 
-**No installation required** — runs directly in the browser.  
-**Aucune installation requise** — fonctionne directement dans le navigateur.  
-**설치 불필요** — 브라우저에서 바로 실행.
+**No installation required** — open the HTML file directly in any modern browser.
 
-1. Open `innocean_attendance_v5_deficit.html` in Chrome, Firefox, or Safari  
-   Ouvrir le fichier dans Chrome, Firefox ou Safari  
-   브라우저에서 HTML 파일 열기
-
-2. Upload the **badge information file** (`Badges_Innocean_Final.xlsx`) — drag & drop or click  
-   Glisser-déposer le fichier badges  
-   배지 정보 파일 업로드 (드래그 또는 클릭)
-
-3. Upload one or more **raw access log files** — multiple files supported  
-   Glisser-déposer les fichiers de données d'accès brutes (plusieurs fichiers possibles)  
-   출입 로데이터 파일 업로드 (여러 개 동시 가능)
-
-4. Data is analyzed and displayed automatically ✅  
-   Les données s'affichent automatiquement ✅  
-   데이터 자동 분석 완료 ✅
+1. Open `innocean_attendance_v5_deficit.html` in Chrome, Firefox, or Safari
+2. Upload the **badge file** (`Badges_Innocean_Final.xlsx`) — drag & drop or click
+3. Upload one or more **access log files** — multiple files supported simultaneously
+4. Data is analysed and displayed instantly ✅
+5. Switch language with the 🇰🇷 / 🇬🇧 / 🇫🇷 buttons at the top right
 
 ---
 
-## 📁 Input File Format / Format des fichiers d'entrée / 입력 파일 형식
+## 📁 Input File Format / Format fichiers / 입력 파일 형식
 
-### Badge file / Fichier badges / 배지 정보 파일
-Required columns: `NOM`, `PRÉNOM`, `CODE DECIMAL`, `MATRICULE RH`  
-Colonnes requises : `NOM`, `PRÉNOM`, `CODE DECIMAL`, `MATRICULE RH`  
-필수 컬럼 : `NOM`, `PRÉNOM`, `CODE DECIMAL`, `MATRICULE RH`
+### Badge file / Fichier badges / 배지 파일
+Required columns: `NOM`, `PRÉNOM`, `CODE DECIMAL`, `MATRICULE RH`
 
-### Raw access log / Données d'accès brutes / 출입 로데이터
+### Access log / Données d'accès brutes / 출입 로데이터
 Required columns: `Date heure`, `Utilisateur`, `Identifiant`  
-Colonnes requises : `Date heure`, `Utilisateur`, `Identifiant`  
-필수 컬럼 : `Date heure`, `Utilisateur`, `Identifiant`  
-→ Extra columns are automatically ignored / Les colonnes supplémentaires sont ignorées / 나머지 컬럼은 자동 무시
+→ Extra columns are automatically ignored
 
 ---
 
@@ -108,70 +85,75 @@ Colonnes requises : `Date heure`, `Utilisateur`, `Identifiant`
 
 | Item | Details |
 |------|---------|
-| Language | HTML5 + Vanilla JavaScript (CSS included) |
-| Charts | [Chart.js 4.4](https://www.chartjs.org/) |
-| Excel parsing | [SheetJS (xlsx) 0.18](https://sheetjs.com/) |
-| Server / DB | **None** — 100% client-side, no data ever leaves the browser |
-| Installation | **Not required** — open the HTML file and go |
+| Language | HTML5 + Vanilla JavaScript + CSS (single file, no build step) |
+| Charts | [Chart.js 4.4](https://www.chartjs.org/) via cdnjs CDN |
+| Excel parsing | [SheetJS (xlsx) 0.18](https://sheetjs.com/) via cdnjs CDN |
+| Server / DB | **None** — 100% client-side |
+| i18n | Built-in translation system — KO / EN / FR |
+| Installation | **Not required** — open and go |
 
 ---
 
-## 💡 Technical Highlights / Points techniques notables / 기술적 특징
+## 💡 Technical Highlights / Points techniques / 기술적 특징
 
-- **Badge matching**: links `Identifiant` (access log) ↔ `CODE DECIMAL` (badge file) with IFR number fallback
-- **Net hours calculation**: automatically subtracts lunch break based on actual overlap
-- **Friday rule**: different departure threshold (18:00 vs 18:30) applied per day of week
-- **Multi-status detection**: a single day can be flagged as both "late" and "hour deficit" simultaneously
-- **Variable column formats**: auto-adapts to changing column layouts from the security provider
-- **XSS protection**: all Excel-sourced data is escaped before HTML rendering
-- **Liaison `Identifiant` ↔ `CODE DECIMAL`** avec fallback IFR
-- **Déduction automatique** de la pause déjeuner selon le chevauchement réel
-- **Protection XSS** : toutes les données lues depuis Excel sont échappées avant insertion HTML
-- 배지 매칭: `Identifiant` ↔ `CODE DECIMAL` 연결, IFR 번호 폴백 처리
-- 실근무 계산: 점심시간 실제 겹침 구간 자동 차감
-- XSS 보안 처리: 엑셀 데이터 HTML 삽입 전 특수문자 이스케이프
+- **Badge matching** — `Identifiant` (access log) ↔ `CODE DECIMAL` (badge file), with IFR number fallback
+- **Net hours** — lunch overlap subtracted dynamically based on actual arrival/departure
+- **Friday rule** — different end threshold (18:00 vs 18:30) per day of week
+- **Multi-status** — a single day can be simultaneously "late + hour deficit"
+- **Variable columns** — auto-adapts to changing column layouts from the security provider
+- **XSS protection** — all Excel-sourced data escaped via `esc()` before HTML injection
+- **Modular JS** — shared helpers: `renderTags()`, `mkBarChart()`, `initTabs()`, `chartColors()`
+- **Trilingual** — `T(key)` translation system, language switch re-renders all UI + charts + PDF
+
+---
+
+## 🔒 Security / Sécurité / 보안
+
+- ✅ No API keys or secrets hardcoded
+- ✅ No external data transmission — employee data never leaves the browser
+- ✅ No localStorage, cookies, or tracking pixels
+- ✅ XSS protection: all user-sourced data sanitised before rendering
+- ✅ CDN scripts loaded with `crossorigin` + `referrerpolicy` attributes
+- ✅ No `eval()` usage
 
 ---
 
 ## 👩‍💼 Background / Contexte / 개발 배경
 
 Developed by **Jiyoung PARK**, Junior Office Manager at INNOCEAN France,  
-to automate a manual monthly process (Excel pivot tables)  
-and provide the HR team with a complete, actionable attendance overview.
+to replace a monthly manual pivot-table workflow and give the HR team  
+a complete, actionable, multilingual attendance overview.
 
 Développé par **Jiyoung PARK**, Junior Office Manager chez INNOCEAN France,  
-pour automatiser un processus manuel (tableau croisé dynamique Excel mensuel)  
-et fournir au service RH une vue complète et actionnable des présences.
+pour automatiser le traitement mensuel des données d'accès (pivot Excel)  
+et fournir au service RH un tableau de bord complet et multilingue.
 
 INNOCEAN France의 Junior Office Manager **박지영**이 개발.  
 매월 수동으로 진행하던 피벗 테이블 작업을 자동화하고,  
-HR 담당자에게 즉시 활용 가능한 출퇴근 분석 도구를 제공하기 위해 제작.
+HR 담당자에게 즉시 활용 가능한 3개 국어 출퇴근 분석 도구를 제공하기 위해 제작.
 
 ---
 
 ## 📸 Overview / Aperçu / 미리보기
 
 ```
-
-[Upload badge file + access log files]
-↓
-[Auto badge matching & calculation]
-↓
-┌──────────────────────────────────────┐
-│ 63 employees | 740 records | 45% late│
-│ 333 hour deficits | 97% matched      │
-└──────────────────────────────────────┘
-↓
+[Upload badge file + access log(s)]   ← drag & drop, multiple files OK
+              ↓
+    [Auto badge matching + calculation]
+              ↓
+┌─────────────────────────────────────────┐
+│ 63 employees │ 740 records │ Late: 45%  │
+│ Hour deficits: 416 │ Match rate: 97%   │
+└─────────────────────────────────────────┘
+              ↓
 [Daily Log] [Employee Summary] [Statistics] [Unmatched Badges]
-↓
-[Click employee name → Individual dashboard]
-📈 Timeline | 📅 Calendar | 📊 Monthly trend | 🕘 Distribution | 📋 Log
-↓
-[🖨️ Print PDF report / CSV download]
-
-
+              ↓
+     [Click employee name → individual dashboard]
+  📈 Timeline │ 📅 Calendar │ 📊 Monthly │ 🕘 Distribution │ 📋 Log
+              ↓
+    [🖨️ PDF report in current language │ 📥 CSV export]
 ```
 
 ---
 
-*Built with ❤️ and Claude AI — April 2026*
+*Built with ❤️ and [Claude AI](https://claude.ai) — April 2026*
